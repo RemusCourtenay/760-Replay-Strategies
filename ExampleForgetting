@@ -64,7 +64,7 @@ class CNN(nn.Module):
   loss = loss.mean()
   loss.backward()
   optimizer.step()
-  return examplestats
+  #return examplestats
   
 def forgetting(examplestats, epoch = 25):
   forgetness = {}
@@ -89,12 +89,12 @@ criterion = nn.CrossEntropyLoss()
 criterion.__init__(reduce=False)
 
 example_stats = {}
-
-for i in range(25):
+epoch = 100
+for i in range(epoch):
   training(train, CNN_Model, CNN_Optim, example_stats)
-print(forgetting(example_stats))
+print(forgetting(example_stats, epoch = epoch))
 
-### Testing - examples that never learnt, assume epoch = 25 (proportion of no learning about 20%)
+### Testing - examples that never learnt, assume epoch = 100 (proportion of no learning about 2.7%)
 c = forgetting(example_stats)
 result = 0
 for i,j in c.items():

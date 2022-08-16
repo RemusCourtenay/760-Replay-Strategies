@@ -1,4 +1,5 @@
 from models.neural_network import NeuralNetwork
+from models.data import DataSet
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
@@ -14,6 +15,18 @@ class DefaultNeuralNetwork(NeuralNetwork):
         self.model.add(tf.keras.layers.Dense(dense_layer_size, activation=activation_type))
         self.model.add(tf.keras.layers.Dense(dense_layer_size))
 
-    def train(self, training_data):
-        # TODO...
-        pass
+    # function to train model on specified training set and test set
+    # TODO... set default test_acc and epochs
+    def train(self, data_set: DataSet, test_acc, epochs):
+        # define optimizer and loss function to use
+        model.compile(optimizer='adam',
+                      loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                      metrics=['accuracy'])
+
+        for i in range(epochs):
+            history = model.fit(data_set.train_data, data_set.train_label)
+            train_loss, train_accuracy = model.evaluate(data_set.test_data,  data_set.test_label, verbose=2)
+
+            # append accuracy to lists
+            data_set.train_acc += history.history['accuracy']
+            data_set.test_acc.append(train_accuracy)

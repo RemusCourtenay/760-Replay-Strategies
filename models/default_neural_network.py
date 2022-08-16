@@ -1,5 +1,5 @@
 from models.neural_network import NeuralNetwork
-from models.data import DataSet
+from data.data_set import DataSet
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf

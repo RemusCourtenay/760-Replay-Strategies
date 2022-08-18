@@ -35,9 +35,8 @@ class SelectionStrategy(ABC):
 
         self.artist.draw()
 
-    @abstractmethod
     def train_model(self) -> 'tuple[float, float]':
-        pass
+        self.model.train(self.data, self.epochs)
     
     @abstractmethod
     def select_memories(self, percentage: int) -> None:

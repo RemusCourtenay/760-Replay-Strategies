@@ -11,10 +11,6 @@ class RandomSelectionStrategy(SelectionStrategy):
     def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist):
         super().__init__(model, data, artist)
 
-    # Not sure if this needs to be a method
-    def train_model(self) -> 'tuple[float, float]':
-        return self.model.train(self.data, self.epochs)
-
     def select_memories(self, percentage: int = 10) -> None:
         old_training_data = self.data.get_training_set()
         old_training_labels = self.data.get_training_labels()

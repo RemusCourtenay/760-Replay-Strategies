@@ -1,3 +1,4 @@
+import numpy as np
 from abc import ABC, abstractmethod
 
 from art import Artist
@@ -13,13 +14,13 @@ class SelectionStrategy(ABC):
         self.artist = artist
 
     @abstractmethod
-    def run(self):
+    def run(self) -> None:
         pass
 
     @abstractmethod
-    def train_model(self):
+    def train_model(self) -> 'tuple[np.ndarray, np.ndarray]':
         pass
     
     @abstractmethod
-    def select_memories(self, percentage: int):
+    def select_memories(self, percentage: int) -> None:
         pass

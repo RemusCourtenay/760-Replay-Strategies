@@ -19,7 +19,7 @@ class DefaultNeuralNetwork(NeuralNetwork):
 
     # function to train model on specified training set and test set
     # TODO... set default test_acc and epochs
-    def train(self, data_set: DataSet, epochs):
+    def train(self, data_set: DataSet, epochs) -> 'tuple[float, float]':
         # define optimizer and loss function to use
         self.model.compile(optimizer='adam',
                            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),

@@ -10,6 +10,6 @@ class NeuralNetwork(ABC):
     
     # TODO... set default values for test_acc and epochs
     @abstractmethod
-    def train(self, training_data: DataSet, epochs):
+    def train(self, training_data: DataSet, epochs) -> 'tuple[float, float]':
         # TODO... figure out what methods this abstract class needs
         pass

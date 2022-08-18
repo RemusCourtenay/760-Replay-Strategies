@@ -1,6 +1,6 @@
 import numpy as np
 
-from art import Artist
+from art import artist
 from data.data_set import DataSet
 from models.neural_network import NeuralNetwork
 from strategies.selection_strategy import SelectionStrategy
@@ -9,9 +9,9 @@ from strategies.selection_strategy import SelectionStrategy
 class DefaultSelectionStrategy(SelectionStrategy):
 
     # TODO... figure out what number this should be
-    DEFAULT_EPOCHS = 10
+    DEFAULT_EPOCHS = 5
 
-    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist):
+    def __init__(self, model: NeuralNetwork, data: DataSet, artist: artist):
         super().__init__(model, data, artist)
 
     def run(self) -> None:
@@ -22,7 +22,7 @@ class DefaultSelectionStrategy(SelectionStrategy):
 
         self.artist.draw()
 
-    def train_model(self) -> 'tuple[np.ndarray, np.ndarray]':
+    def train_model(self) -> 'tuple[float, float]':
         # TODO... make epochs be something real
         return self.model.train(self.data, self.DEFAULT_EPOCHS)
 

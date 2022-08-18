@@ -8,7 +8,7 @@ class DefaultArtist(Artist):
         self.training_accuracy = []
         self.validation_accuracy = []
 
-    def draw(self):
+    def draw(self) -> None:
         plt.plot(self.training_accuracy, label='training_accuracy')
         plt.plot(self.validation_accuracy, label='test_accuracy')
         plt.xlabel('Epoch')
@@ -17,6 +17,6 @@ class DefaultArtist(Artist):
         plt.legend(loc='lower right')
         plt.show()
 
-    def add_results(self, training_data, validation_data):
+    def add_results(self, training_data, validation_data) -> None:
         self.training_accuracy.append(training_data)
         self.validation_accuracy.append(validation_data)

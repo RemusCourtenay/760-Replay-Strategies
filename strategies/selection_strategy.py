@@ -1,14 +1,13 @@
-import numpy as np
 from abc import ABC, abstractmethod
 
-from art import artist
+from art.artist import Artist
 from models.neural_network import NeuralNetwork
 from data.data_set import DataSet
 
 
 class SelectionStrategy(ABC):
 
-    def __init__(self, model: NeuralNetwork, data: DataSet, artist: artist):
+    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist):
         self.model = model
         self.data = data
         self.artist = artist

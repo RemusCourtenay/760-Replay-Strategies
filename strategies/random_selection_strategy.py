@@ -6,25 +6,14 @@ from models.neural_network import NeuralNetwork
 from strategies.selection_strategy import SelectionStrategy
 
 
-class DefaultSelectionStrategy(SelectionStrategy):
-
-    # TODO... figure out what number this should be
-    DEFAULT_EPOCHS = 5
+class RandomSelectionStrategy(SelectionStrategy):
 
     def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist):
         super().__init__(model, data, artist)
 
-    def run(self) -> None:
-        for _ in range(self.data.get_tasks().len):
-            self.select_memories()
-            training_results, validation_results = self.train_model()
-            self.artist.add_results(training_results, validation_results)
-
-        self.artist.draw()
-
     # Not sure if this needs to be a method
     def train_model(self) -> 'tuple[float, float]':
-        return self.model.train(self.data, self.DEFAULT_EPOCHS)
+        return self.model.train(self.data, self.epochs)
 
     def select_memories(self, percentage: int = 10) -> None:
         old_training_data = self.data.get_training_set()

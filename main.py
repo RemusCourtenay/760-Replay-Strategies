@@ -1,6 +1,6 @@
 from data.default_data_set import DefaultDataSet
 from models.default_neural_network import DefaultNeuralNetwork
-from strategies.default_selection_strategy import DefaultSelectionStrategy
+from strategies.random_selection_strategy import RandomSelectionStrategy
 from strategies.selection_strategy import SelectionStrategy
 
 
@@ -10,4 +10,4 @@ def run_selection_strategy(strategy: SelectionStrategy):
 
 
 if __name__ == "__main__":
-    run_selection_strategy(DefaultSelectionStrategy(DefaultNeuralNetwork(), DefaultDataSet()))
+    run_selection_strategy(RandomSelectionStrategy(DefaultNeuralNetwork(), DefaultDataSet()))

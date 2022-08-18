@@ -10,6 +10,7 @@ class DataSet(ABC):
 
     @abstractmethod
     def get_training_labels(self):
+        # Implementations should return the training labels
         pass
 
     @abstractmethod
@@ -19,7 +20,5 @@ class DataSet(ABC):
 
     @abstractmethod
     def get_validation_labels(self):
+        # Implementations should return the validation labels
         pass
-
-    def update_accuracy(self,   ):
-

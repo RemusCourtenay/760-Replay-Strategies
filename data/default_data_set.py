@@ -8,7 +8,7 @@ class DefaultDataSet(DataSet):
         # tasks is a list or array of sets of training data ordered into the separate tasks that they represent.
         self.tasks = None
         # current_training_data is a set of training data made up of the currently learning task data plus whichever
-        # options where selected by the selection policy
+        # options were selected by the selection policy
         self.current_training_data = None
         # validation_data is the set of data used to check that the model isn't over-fitting.
         self.validation_data = None

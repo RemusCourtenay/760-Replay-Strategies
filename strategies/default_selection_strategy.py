@@ -1,5 +1,6 @@
 import numpy as np
 
+from art import Artist
 from data.data_set import DataSet
 from models.neural_network import NeuralNetwork
 from strategies.selection_strategy import SelectionStrategy
@@ -7,15 +8,29 @@ from strategies.selection_strategy import SelectionStrategy
 
 class DefaultSelectionStrategy(SelectionStrategy):
 
-    def __init__(self, model: NeuralNetwork, data: DataSet):
-        super().__init__(model, data)
+    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist):
+        super().__init__(model, data, artist)
 
-    def train_model(self):
+    def run(self):
+
+        for _ in range(self.data.get_tasks().len):
+            self.select_memories()
+            training_results = self.train_model()
+            validation_results = self.test_model()
+            self.artist.add_results(training_results, validation_results)
+
+        self.artist.draw()
+
+    def train_model(self) -> np.ndarray:
+        # TODO...
+        pass
+
+    def test_model(self) -> np.ndarray:
         # TODO...
         pass
     
     # TODO... clean this up and make it use the DataSet methods
-    def select_memories(self, percentage):
+    def select_memories(self, percentage: int = 10):
         old_training_data = self.data.get_training_set()
         old_training_labels = self.data.get_training_labels()
         

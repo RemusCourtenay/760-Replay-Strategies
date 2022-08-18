@@ -3,6 +3,10 @@ from data.data_set import DataSet
 
 
 class NeuralNetwork(ABC):
+
+    def __init__(self):
+        self.training_accuracy = []
+        self.test_accuracy = []
     
     # TODO... set default values for test_acc and epochs
     @abstractmethod

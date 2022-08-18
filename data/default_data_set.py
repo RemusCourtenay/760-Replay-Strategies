@@ -13,7 +13,7 @@ class DefaultDataSet(DataSet):
         # validation_data is the set of data used to check that the model isn't over-fitting.
         self.validation_data = None
 
-    def select_training_set(self):
+    def update_training_set(self, selected_memory_data, selected_memory_labels):
         # TODO...
         pass
 

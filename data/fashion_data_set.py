@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import List
 import numpy.typing as npt
 
 from data.data_set import DataSet, build_tasks
@@ -40,7 +40,7 @@ class FashionDataSet(DataSet):
         self.current_training_data = data[random_ordering]
         self.current_training_labels = labels[random_ordering]
 
-    def get_tasks(self) -> List[List[List[npt.NDArray[np.uint8]], List[np.uint8]]]:
+    def get_tasks(self) -> List[List[List[np.uint8]]]:
         return self.tasks.copy()
 
     def get_training_set(self) -> npt.NDArray[np.uint8]:

@@ -35,3 +35,16 @@ class DataSet(ABC):
     def get_validation_labels(self):
         """Returns the set of validation data labels that are used to ensure that the model isn't over-fitting"""
         pass
+
+
+def build_tasks(training_images, training_labels, num_tasks: int, num_labels_per_task: int) \
+        -> 'list[list[list, list]]':
+    # cursed list instantiation
+    tasks = [[[], []] for _ in range(num_tasks)]
+
+    for image, label in zip(training_images, training_labels):
+        task_num = int(label / num_labels_per_task)
+        tasks[task_num][0].append(image)
+        tasks[task_num][1].append(label)
+
+    return tasks

@@ -13,7 +13,7 @@ class DefaultArtist(Artist):
         plt.plot(self.validation_accuracy, label='test_accuracy')
         plt.xlabel('Epoch')
         plt.ylabel('Accuracy')
-        plt.ylim([0.5, 1])
+        plt.ylim([0, 1])
         plt.legend(loc='lower right')
         plt.show()
 

@@ -8,7 +8,6 @@ import numpy as np
 
 
 class FashionDataSet(DataSet):
-
     Image = npt.NDArray[np.int_]
 
     NUM_TASKS = 10
@@ -29,20 +28,17 @@ class FashionDataSet(DataSet):
                             selected_memory_data: npt.ArrayLike, selected_memory_labels: npt.ArrayLike):
         self.current_task += 1
 
-        # Probably way overcomplicated this
-        new_training_data_array = np.ndarray(self.tasks[self.current_task])
-        selected_memory_data_array = np.ndarray(selected_memory_data)
-        selected_memory_labels_array = np.ndarray(selected_memory_labels)
-        # Put labels under images
-        # TODO... ensure this doesn't break because the selected_memory_data_array is already 2D
-        selected_memories = np.concatenate((selected_memory_data_array, selected_memory_labels_array), axis=0)
-        # Append selected memories
-        new_training_data = np.concatenate((new_training_data_array, selected_memories), axis=1)
-        # Shuffle set
-        np.random.shuffle(new_training_data)
+        current_task_tuple = self.tasks[self.current_task]
+        current_task_data = current_task_tuple[0]
+        current_task_labels = current_task_tuple[1]
 
-        self.current_training_data = new_training_data[0]
-        self.current_training_labels = new_training_data[1]
+        random_ordering = np.arange(len(current_task_data) + len(selected_memory_data))
+
+        data = np.concatenate(current_task_data, selected_memory_data)
+        labels = np.concatenate(current_task_labels, selected_memory_labels)
+
+        self.current_training_data = data[random_ordering]
+        self.current_training_labels = labels[random_ordering]
 
     def get_tasks(self) -> List[List[List[npt.NDArray[np.uint8]], List[np.uint8]]]:
         return self.tasks.copy()
@@ -58,4 +54,3 @@ class FashionDataSet(DataSet):
 
     def get_validation_labels(self) -> npt.NDArray[np.uint8]:
         return self.validation_labels.copy()
-

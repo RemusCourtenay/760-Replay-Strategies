@@ -5,7 +5,7 @@ import tensorflow as tf
 
 class SimpleCNN(NeuralNetwork):
 
-    DEFAULT_OPTIMIZER = 'adam'
+    DEFAULT_OPTIMIZER = tf.keras.optimizers.SGD(learning_rate=0.01)
     ACCURACY_METRIC_TAG = 'accuracy'
 
     def __init__(self):
@@ -28,9 +28,11 @@ class SimpleCNN(NeuralNetwork):
         train_accruacy = []
         test_accruacy = []
         for i in range(epochs):
-            history = self.model.fit(data_set.get_training_set(), data_set.get_training_labels())
+            train_data = data_set.get_training_set()
+            print('Training data shape: ', train_data.shape)
+            history = self.model.fit(train_data, data_set.get_training_labels())
             test_loss, test_acc = self.model.evaluate(data_set.get_validation_set(),
-                                                             data_set.get_validation_labels(), verbose=2)
+                                                             data_set.get_validation_labels())
             train_accruacy.append(history.history[self.ACCURACY_METRIC_TAG])
             test_accruacy.append(test_acc)
             # return accuracy for display purposes

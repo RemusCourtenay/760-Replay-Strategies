@@ -25,6 +25,9 @@ class RandomSelectionStrategy(SelectionStrategy):
         else:
             self.epochs = 0
 
+    def setMemory(self, percent):
+        self.memory_percent = percent
+
     def select_memories(self, percentage: int) -> None:
         old_training_data = self.data.get_training_set()
         old_training_labels = self.data.get_training_labels()
@@ -37,9 +40,13 @@ class RandomSelectionStrategy(SelectionStrategy):
         old_data_subset = old_training_data[s]
         old_label_subset = old_training_labels[s]
 
-        # cut subset down to desired size
-        old_data_subset = old_data_subset[:int(n * percentage)]
-        old_label_subset = old_label_subset[:int(n * percentage)]
+        # cut subset down to desired size (use the parameter directly if it is an integer > 1)
+        if percentage > 1:
+            old_data_subset = old_data_subset[:int(percentage)]
+            old_label_subset = old_label_subset[:int(percentage)]
+        else:
+            old_data_subset = old_data_subset[:int(n * percentage)]
+            old_label_subset = old_label_subset[:int(n * percentage)]
 
         # Update data object's current training data
         self.data.update_training_set(old_data_subset, old_label_subset)
@@ -85,11 +92,11 @@ class RandomSelectionStrategy(SelectionStrategy):
 
         print('===== Final Accuracy =====')
         print('Evaluation of Task 1 tests')
-        model.evaluate(task1_data, task1_label, verbose=2)
+        model.evaluate(task1_data, task1_label)
         print('==========================')
         print('Evaluation of Task 2 tests')
-        model.evaluate(task2_data, task2_label, verbose=2)
+        model.evaluate(task2_data, task2_label)
         print('==========================')
         print('Evaluation of all tests')
-        model.evaluate(all_test_data, all_test_label, verbose=2)
+        model.evaluate(all_test_data, all_test_label)
         print('==========================')

@@ -35,6 +35,11 @@ class MnistDataSet(DataSet):
     def get_tasks(self):
         pass
 
+    # function to reset current task back to first task (used when multiple NN share one dataset)
+    def reset_tasks(self):
+        self.current_training_data = np.array(self.train_tasks[0][0])
+        self.current_training_labels = np.array(self.train_tasks[0][1])
+
     def get_training_set(self):
         return self.current_training_data.copy()
 

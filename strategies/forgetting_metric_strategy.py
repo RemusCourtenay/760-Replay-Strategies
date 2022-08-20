@@ -27,7 +27,7 @@ class ForgettingStrategy(SelectionStrategy):
         else:
             self.epochs = 0
 
-    def select_memories(self, percentage: int) -> None:
+    def select_memories(self) -> None:
         old_training_data = self.data.get_training_set()
         old_training_labels = self.data.get_training_labels()
 
@@ -37,9 +37,6 @@ class ForgettingStrategy(SelectionStrategy):
         # Update data object's current training data
         self.data.update_training_set(new_data, new_label)
 
-    # TODO... figure out what these are supposed to be
-    # % of previous task to keep (randomly)
-    DEFAULT_MEMORY_PERCENT = .05
     # EPOCH per task
     DEFAULT_EPOCHS = 5
 
@@ -48,7 +45,7 @@ class ForgettingStrategy(SelectionStrategy):
             print('==== task %d =====' %(i + 1))
             # only update replay memory if not the first task
             if i > 0:
-                self.select_memories(self.memory_percent)
+                self.select_memories()
             training_accuracy, test_accuracy = self.train_forgetness(self.data, self.epochs)
             self.artist.add_results(training_accuracy, test_accuracy)
 
@@ -114,7 +111,8 @@ class ForgettingStrategy(SelectionStrategy):
             if j == epochs:
                 result.append(i)
 
-        self.forgetness = result
+        if self.forgetness is None:
+            self.forgetness = result
         return train_accuracy, test_accuracy
 
 

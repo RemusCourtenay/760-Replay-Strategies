@@ -27,9 +27,9 @@ if __name__ == "__main__":
     print('Running Random Selection Strategy. . .')
     dataset.reset_tasks()
     randomselection = RandomSelectionStrategy(NeuralNetwork(), dataset, DefaultArtist())
-    run_selection_strategy(randomselection)
     # specify number of data to use in random selection
     randomselection.setMemory(num_data_to_keep)
+    run_selection_strategy(randomselection)
 
     print('Running No Selection Strategy. . .')
     dataset.reset_tasks()

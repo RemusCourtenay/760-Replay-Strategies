@@ -30,7 +30,7 @@ class SimpleCNN(NeuralNetwork):
         for i in range(epochs):
             train_data = data_set.get_training_set()
             print('Training data shape: ', train_data.shape)
-            history = self.model.fit(train_data, data_set.get_training_labels())
+            history = self.model.fit(train_data, data_set.get_training_labels(), verbose=2)
             test_loss, test_acc = self.model.evaluate(data_set.get_validation_set(),
                                                              data_set.get_validation_labels())
             train_accruacy.append(history.history[self.ACCURACY_METRIC_TAG])

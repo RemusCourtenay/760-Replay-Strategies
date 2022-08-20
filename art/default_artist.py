@@ -18,5 +18,5 @@ class DefaultArtist(Artist):
         plt.show()
 
     def add_results(self, training_data, validation_data) -> None:
-        self.training_accuracy.append(training_data)
-        self.validation_accuracy.append(validation_data)
+        self.training_accuracy += training_data
+        self.validation_accuracy += validation_data

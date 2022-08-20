@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import numpy as np
 
 
 class DataSet(ABC):
@@ -48,3 +49,22 @@ def build_tasks(training_images, training_labels, num_tasks: int, num_labels_per
         tasks[task_num][1].append(label)
 
     return tasks
+
+
+# Shuffles data for a given dataset and label
+def shuffle_data(data, label):
+    data = np.array(data)
+    label = np.array(label)
+
+    n = len(data)
+
+    # create list of indexes and shuffle them
+    indexes = np.arange(0, n)
+    np.random.shuffle(indexes)
+
+    # rearrange data and label sets using shuffled indexes
+    randomised_data = data[indexes]
+    randomised_label = label[indexes]
+
+    return randomised_data, randomised_label
+

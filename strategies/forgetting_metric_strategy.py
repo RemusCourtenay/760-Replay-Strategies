@@ -44,7 +44,7 @@ class ForgettingStrategy(SelectionStrategy):
 
     def run(self) -> None:
         for i in range(self.data.NUM_TASKS):
-            print('==== task %d =====' %(i + 1))
+            print('==== task %d =====' % (i + 1))
             # only update replay memory if not the first task
             if i > 0:
                 self.select_memories()
@@ -57,7 +57,6 @@ class ForgettingStrategy(SelectionStrategy):
         # draw plot
         # self.artist.draw()
 
-
     # function to train model on specified training set and test set
     def train_forgetness(self, data: DataSet, epochs):
         model = self.model.model
@@ -68,7 +67,6 @@ class ForgettingStrategy(SelectionStrategy):
         # arrays for plotting later
         train_accuracy = []
         test_accuracy = []
-
 
         # define optimizer and loss function to use
         opt = tf.keras.optimizers.SGD(learning_rate=0.01)
@@ -85,7 +83,6 @@ class ForgettingStrategy(SelectionStrategy):
             test_loss, test_acc = model.evaluate(validation_data, validation_label, verbose=0)
             train_accuracy.append(history.history['accuracy'])
             test_accuracy.append(test_acc)
-
 
             probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
             predictions = probability_model.predict(train_data, verbose=0)
@@ -116,5 +113,3 @@ class ForgettingStrategy(SelectionStrategy):
         if self.forgetness is None:
             self.forgetness = result
         return train_accuracy, test_accuracy
-
-

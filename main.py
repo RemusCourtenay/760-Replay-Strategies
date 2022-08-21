@@ -1,4 +1,4 @@
-from data.mnist_data_set import MnistDataSet as DataSet
+from data.mnist_data_set import MnistDataSet
 from models.simple_cnn import SimpleCNN as NeuralNetwork
 from strategies.random_selection_strategy import RandomSelectionStrategy
 from strategies.no_selection_strategy import NoSelectionStrategy
@@ -12,6 +12,7 @@ def run_selection_strategy(strategy: SelectionStrategy):
     strategy.run()
     return
 
+
 def evaluate_strategy(policy) -> None:
     model = policy.model.model
 
@@ -24,7 +25,6 @@ def evaluate_strategy(policy) -> None:
     all_test_data = tf.convert_to_tensor(policy.data.validation_data)
     all_test_label = tf.convert_to_tensor(policy.data.validation_labels)
 
-
     print('===== Test set evaluation for %s =====' % policy.policy_name)
     print('Evaluation of Task 1 tests')
     model.evaluate(task1_data, task1_label, verbose=2)
@@ -34,9 +34,10 @@ def evaluate_strategy(policy) -> None:
     model.evaluate(all_test_data, all_test_label, verbose=2)
     print('========================================================')
 
+
 if __name__ == "__main__":
     # instantiate one dataset to train all models
-    dataset = DataSet()
+    dataset = MnistDataSet()
 
     forgetting_selection = ForgettingStrategy(NeuralNetwork(), dataset, DefaultArtist(), 'Forgetting selection')
     print('Running Forgetting Metric Strategy. . .')
@@ -44,7 +45,7 @@ if __name__ == "__main__":
 
     evaluate_strategy(forgetting_selection)
 
-    #get number of forgetting data produced
+    # get number of forgetting data produced
     num_data_to_keep = len(forgetting_selection.forgetness)
     print('size of replay subset: ', num_data_to_keep)
     print('========================================================')
@@ -62,7 +63,6 @@ if __name__ == "__main__":
     no_selection = NoSelectionStrategy(NeuralNetwork(), dataset, DefaultArtist(), 'No selection')
     run_selection_strategy(no_selection)
     # no_selection.artist.draw_demonstration(no_selection.model)
-
 
     # draw graph comparing multiple selection strategies
     random_selection.artist.draw_multiple_comparisons([forgetting_selection.artist, no_selection.artist])

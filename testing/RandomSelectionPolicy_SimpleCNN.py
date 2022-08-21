@@ -46,6 +46,9 @@ def splitTasks(train_data, train_label):
             task2_label.append(train_label[i])
     return np.array(task1_data), np.array(task1_label), np.array(task2_data), np.array(task2_label)
 
+
+
+
 # returns a randomly selected subset of training_data, size of subset is returned as a percentage of the original
 def randomSelectSubset(data, label, percentage):
     n = len(data)

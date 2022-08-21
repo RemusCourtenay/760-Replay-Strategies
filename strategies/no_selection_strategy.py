@@ -6,11 +6,15 @@ import tensorflow as tf
 
 
 class NoSelectionStrategy(SelectionStrategy):
-    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist):
+    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist, policy_name):
         self.model = model
         self.data = data
         self.artist = artist
-        self.epochs = 5
+
+        self.policy_name = policy_name
+        self.artist.add_policy_name(policy_name)
+
+        self.epochs = 10
         self.memory_percent = 0
 
     def select_memories(self, percentage: int) -> None:
@@ -28,7 +32,7 @@ class NoSelectionStrategy(SelectionStrategy):
 
         # evaluate final accuracy on the 3 sets
         self.final_evaluate()
-        self.artist.draw()
+        # self.artist.draw()
 
     def train_model(self) -> 'tuple[list[float], list[float]]':
         training_accuracy, test_accuracy = self.model.train(self.data, self.epochs)

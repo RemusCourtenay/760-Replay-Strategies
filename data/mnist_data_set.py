@@ -52,8 +52,14 @@ class MnistDataSet(DataSet):
     def get_validation_labels(self):
         return self.validation_labels.copy()
 
+    def get_task_validation_set(self, task_number):
+        return self.test_tasks[task_number][0]
 
-    # randomly split training data and test data into 2 tasks with 5 random labels in each
+    def get_task_validation_labels(self, task_number):
+        return self.test_tasks[task_number][0]
+
+
+            # randomly split training data and test data into 2 tasks with 5 random labels in each
     def build_tasks(self, training_images, training_labels, test_images, test_labels, num_tasks: int, num_labels_per_task: int, num_labels: int) \
             -> 'list[list[list, list]], list[list[list, list]]':
 

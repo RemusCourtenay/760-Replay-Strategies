@@ -9,10 +9,12 @@ from strategies.selection_strategy import SelectionStrategy
 
 class RandomSelectionStrategy(SelectionStrategy):
 
-    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist, memory_percent=0, epochs=0):
+    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist, policy_name, memory_percent=0, epochs=0):
         self.model = model
         self.data = data
         self.artist = artist
+        self.policy_name = policy_name
+        self.artist.add_policy_name(policy_name)
 
         # Probably a better way to do this
         if memory_percent == 0:
@@ -55,7 +57,7 @@ class RandomSelectionStrategy(SelectionStrategy):
     # % of previous task to keep (randomly)
     DEFAULT_MEMORY_PERCENT = .05
     # EPOCH per task
-    DEFAULT_EPOCHS = 5
+    DEFAULT_EPOCHS = 10
 
     def run(self) -> None:
         for i in range(self.data.NUM_TASKS):
@@ -67,10 +69,10 @@ class RandomSelectionStrategy(SelectionStrategy):
             self.artist.add_results(training_accuracy, test_accuracy)
 
         # evaluate final accuracy on the 3 sets
-        self.final_evaluate()
+        # self.final_evaluate()
 
-        # draw plot
-        self.artist.draw()
+        # # draw plot
+        # self.artist.draw()
 
     def train_model(self) -> 'tuple[list[float], list[float]]':
         training_accuracy, test_accuracy = self.model.train(self.data, self.epochs)

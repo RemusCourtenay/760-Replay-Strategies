@@ -9,10 +9,12 @@ from strategies.selection_strategy import SelectionStrategy
 
 class ForgettingStrategy(SelectionStrategy):
 
-    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist, memory_percent=0, epochs=0):
+    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist, policy_name, memory_percent=0, epochs=0):
         self.model = model
         self.data = data
         self.artist = artist
+        self.policy_name = policy_name
+        self.artist.add_policy_name(policy_name)
 
         self.forgetness = None
 
@@ -38,7 +40,7 @@ class ForgettingStrategy(SelectionStrategy):
         self.data.update_training_set(new_data, new_label)
 
     # EPOCH per task
-    DEFAULT_EPOCHS = 5
+    DEFAULT_EPOCHS = 10
 
     def run(self) -> None:
         for i in range(self.data.NUM_TASKS):
@@ -50,10 +52,10 @@ class ForgettingStrategy(SelectionStrategy):
             self.artist.add_results(training_accuracy, test_accuracy)
 
         # evaluate final accuracy on the 3 sets
-        self.final_evaluate()
+        # self.final_evaluate()
 
         # draw plot
-        self.artist.draw()
+        # self.artist.draw()
 
 
     # function to train model on specified training set and test set
@@ -76,17 +78,17 @@ class ForgettingStrategy(SelectionStrategy):
                       metrics=['accuracy'])
         stat = {}
         for i in range(epochs):
-            print('Training data shape: ', train_data.shape)
-            history = model.fit(train_data, train_label, verbose=2)
+            # print('Training data shape: ', train_data.shape)
+            history = model.fit(train_data, train_label, verbose=1)
 
             # evaluate for plotting purposes
-            test_loss, test_acc = model.evaluate(validation_data, validation_label)
+            test_loss, test_acc = model.evaluate(validation_data, validation_label, verbose=0)
             train_accuracy.append(history.history['accuracy'])
             test_accuracy.append(test_acc)
 
 
             probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
-            predictions = probability_model.predict(train_data)
+            predictions = probability_model.predict(train_data, verbose=0)
             for i in range(len(train_data)):
                 if i in stat:
                     stat[i].append(np.argmax(predictions[i]) == train_label[i])
@@ -116,26 +118,3 @@ class ForgettingStrategy(SelectionStrategy):
         return train_accuracy, test_accuracy
 
 
-    def final_evaluate(self) -> None:
-        model = self.model.model
-
-        # get testing data and labels for individual tasks
-        task1_data = tf.convert_to_tensor(self.data.test_tasks[0][0])
-        task1_label = tf.convert_to_tensor(self.data.test_tasks[0][1])
-        task2_data = tf.convert_to_tensor(self.data.test_tasks[1][0])
-        task2_label = tf.convert_to_tensor(self.data.test_tasks[1][1])
-
-        all_test_data = tf.convert_to_tensor(self.data.validation_data)
-        all_test_label = tf.convert_to_tensor(self.data.validation_labels)
-
-
-        print('===== Final Accuracy =====')
-        print('Evaluation of Task 1 tests')
-        model.evaluate(task1_data, task1_label, verbose=2)
-        print('==========================')
-        print('Evaluation of Task 2 tests')
-        model.evaluate(task2_data, task2_label, verbose=2)
-        print('==========================')
-        print('Evaluation of all tests')
-        model.evaluate(all_test_data, all_test_label, verbose=2)
-        print('==========================')

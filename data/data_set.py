@@ -37,6 +37,14 @@ class DataSet(ABC):
         """Returns the set of validation data labels that are used to ensure that the model isn't over-fitting"""
         pass
 
+    @abstractmethod
+    def get_task_validation_set(self, task_number):
+        return self.test_tasks[task_number][0]
+
+    @abstractmethod
+    def get_task_validation_labels(self, task_number):
+        return self.test_tasks[task_number][1]
+
 
 def build_tasks(training_images, training_labels, num_tasks: int, num_labels_per_task: int) \
         -> 'list[list[list, list]]':

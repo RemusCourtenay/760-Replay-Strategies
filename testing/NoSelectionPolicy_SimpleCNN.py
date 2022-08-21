@@ -17,7 +17,7 @@ def SimpleCNN():
 # function to train model on specified training set and test set
 def train(model, train_data, train_label, test_data, test_label, train_acc, test_acc, epochs):
     # define optimizer and loss function to use
-    model.compile(optimizer='adam',
+    model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=0.01),
                   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                   metrics=['accuracy'])
 
@@ -50,8 +50,8 @@ def splitTasks(train_data, train_label):
 # download mnist data
 (train_images, train_labels), (test_images, test_labels) = tf.keras.datasets.mnist.load_data()
 print(train_images.shape)
-train1_data, train1_label, train2_data, train2_label = splitTasks(train_images, train_labels)
-test1_data, test1_label, test2_data, test2_label = splitTasks(test_images, test_labels)
+# train1_data, train1_label, train2_data, train2_label = splitTasks(train_images, train_labels)
+# test1_data, test1_label, test2_data, test2_label = splitTasks(test_images, test_labels)
 
 # instantiate model
 model = SimpleCNN()
@@ -66,21 +66,24 @@ test_acc = []
 
 print()
 print('==========================')
-print('Training Task 1')
-train(model, train1_data, train1_label, test_images, test_labels, train_acc, test_acc, 5)
-print('Training Task 2')
-train(model, train2_data, train2_label, test_images, test_labels, train_acc, test_acc, 5)
+print('Training all Tasks')
+train(model, train_images, train_labels, test_images, test_labels, train_acc, test_acc, 10)
+
+# print('Training Task 1')
+# train(model, train1_data, train1_label, test_images, test_labels, train_acc, test_acc, 5)
+# print('Training Task 2')
+# train(model, train2_data, train2_label, test_images, test_labels, train_acc, test_acc, 5)
 plt.plot(train_acc, label='training_accuracy')
 plt.plot(test_acc, label='test_accuracy')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
-plt.ylim([0.5, 1])
+plt.ylim([0, 1])
 plt.legend(loc='lower right')
-print('Evaluation of Task 1 tests')
-model.evaluate(test1_data, test1_label, verbose=2)
-print('==========================')
-print('Evaluation of Task 2 tests')
-model.evaluate(test2_data, test2_label, verbose=2)
+# print('Evaluation of Task 1 tests')
+# model.evaluate(test1_data, test1_label, verbose=2)
+# print('==========================')
+# print('Evaluation of Task 2 tests')
+# model.evaluate(test2_data, test2_label, verbose=2)
 print('==========================')
 print('Evaluation of all tests')
 model.evaluate(test_images, test_labels, verbose=2)

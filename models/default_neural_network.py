@@ -14,8 +14,7 @@ class DefaultNeuralNetwork(NeuralNetwork):
                  num_filters_2=8, kernel_size_2=(3, 3),
                  activation_type='relu',
                  dense_layer_size=10):
-        super().__init__()
-        self.model = tf.keras.models.Sequential()
+        super().__init__(tf.keras.models.Sequential())
         self.model.add(tf.keras.layers.Conv2D(num_filters_1, kernel_size_1, activation=activation_type,
                                               input_shape=input_shape))
         self.model.add(tf.keras.layers.MaxPooling2D(max_pooling_shape))

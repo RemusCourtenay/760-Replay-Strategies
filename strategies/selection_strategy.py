@@ -6,15 +6,16 @@ from data.data_set import DataSet
 
 
 class SelectionStrategy(ABC):
-
     # TODO... figure out what these are supposed to be
-    DEFAULT_MEMORY_PERCENT = 10
+    DEFAULT_MEMORY_PERCENT = 10.0
     DEFAULT_EPOCHS = 5
 
-    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist, memory_percent=0, epochs=0):
+    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist, strategy_name: str, memory_percent: float,
+                 epochs: int):
         self.model = model
         self.data = data
         self.artist = artist
+        self.strategy_name = strategy_name
 
         # Probably a better way to do this
         if memory_percent == 0:
@@ -36,8 +37,8 @@ class SelectionStrategy(ABC):
         self.artist.draw()
 
     def train_model(self) -> 'tuple[float, float]':
-        self.model.train(self.data, self.epochs)
-    
+        return self.model.train(self.data, self.epochs)
+
     @abstractmethod
-    def select_memories(self, percentage: int) -> None:
+    def select_memories(self, percentage: float) -> None:
         pass

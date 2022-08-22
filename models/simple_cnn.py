@@ -4,13 +4,11 @@ import tensorflow as tf
 
 
 class SimpleCNN(NeuralNetwork):
-
     DEFAULT_OPTIMIZER = tf.keras.optimizers.SGD(learning_rate=0.001)
     ACCURACY_METRIC_TAG = 'accuracy'
 
     def __init__(self):
-        super().__init__()
-        self.model = tf.keras.models.Sequential()
+        super().__init__(tf.keras.models.Sequential())
         self.model.add(tf.keras.layers.Conv2D(4, (5, 5), activation='relu', input_shape=(28, 28, 1)))
         self.model.add(tf.keras.layers.MaxPooling2D((2, 2)))
         self.model.add(tf.keras.layers.Conv2D(8, (3, 3), activation='relu'))
@@ -31,8 +29,8 @@ class SimpleCNN(NeuralNetwork):
                            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                            metrics=[self.ACCURACY_METRIC_TAG])
 
-        train_accruacy = []
-        test_accruacy = []
+        train_accuracy = []
+        test_accuracy = []
 
         ############ temp code to generate demsontration graph##############
         task1_data = tf.convert_to_tensor(data_set.test_tasks[0][0])
@@ -46,21 +44,20 @@ class SimpleCNN(NeuralNetwork):
             # print('Training data shape: ', train_data.shape)
             history = self.model.fit(train_data, data_set.get_training_labels())
             test_loss, test_acc = self.model.evaluate(data_set.get_validation_set(),
-                                                             data_set.get_validation_labels(), verbose=0)
+                                                      data_set.get_validation_labels(), verbose=0)
 
             ############ temp code to generate demsontration graph##############
             task1_loss, task1_acc = self.model.evaluate(task1_data,
-                                                      task1_label, verbose=0)
+                                                        task1_label, verbose=0)
             task2_loss, task2_acc = self.model.evaluate(task2_data,
-                                                      task2_label, verbose=0)
+                                                        task2_label, verbose=0)
             #####################################################################
 
-            train_accruacy.append(history.history[self.ACCURACY_METRIC_TAG])
-            test_accruacy.append(test_acc)
+            train_accuracy.append(history.history[self.ACCURACY_METRIC_TAG])
+            test_accuracy.append(test_acc)
 
             self.task1_accuracy.append(task1_acc)
             self.task2_accuracy.append(task2_acc)
 
             # return accuracy for display purposes
-        return train_accruacy, test_accruacy
-
+        return train_accuracy, test_accuracy

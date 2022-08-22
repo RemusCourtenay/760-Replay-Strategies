@@ -9,23 +9,10 @@ from strategies.selection_strategy import SelectionStrategy
 
 class RandomSelectionStrategy(SelectionStrategy):
 
-    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist, policy_name, memory_percent=0, epochs=0):
-        self.model = model
-        self.data = data
-        self.artist = artist
-        self.policy_name = policy_name
-        self.artist.add_policy_name(policy_name)
+    STRATEGY_NAME = "Random Selection Strategy"
 
-        # Probably a better way to do this
-        if memory_percent == 0:
-            self.memory_percent = self.DEFAULT_MEMORY_PERCENT
-        else:
-            self.memory_percent = memory_percent
-
-        if epochs == 0:
-            self.epochs = self.DEFAULT_EPOCHS
-        else:
-            self.epochs = 0
+    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist, memory_percent=0.05, epochs=10):
+        super().__init__(model, data, artist, self.STRATEGY_NAME, memory_percent, epochs)
 
     def setMemory(self, percent):
         self.memory_percent = percent
@@ -52,12 +39,6 @@ class RandomSelectionStrategy(SelectionStrategy):
 
         # Update data object's current training data
         self.data.update_training_set(old_data_subset, old_label_subset)
-
-    # TODO... figure out what these are supposed to be
-    # % of previous task to keep (randomly)
-    DEFAULT_MEMORY_PERCENT = .05
-    # EPOCH per task
-    DEFAULT_EPOCHS = 10
 
     def run(self) -> None:
         for i in range(self.data.NUM_TASKS):

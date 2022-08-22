@@ -1,3 +1,5 @@
+from typing import Tuple, List
+
 from models.neural_network import NeuralNetwork
 from data.mnist_data_set import MnistDataSet as DataSet
 import tensorflow as tf
@@ -23,7 +25,7 @@ class SimpleCNN(NeuralNetwork):
         #####################################################################
 
     # function to train model on specified training set and test set
-    def train(self, data_set: DataSet, epochs) -> 'tuple[list[float], list[float]]':
+    def train(self, data_set: DataSet, epochs) -> Tuple[List[float], List[float]]:
         # define optimizer and loss function to use
         self.model.compile(optimizer=self.DEFAULT_OPTIMIZER,
                            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),

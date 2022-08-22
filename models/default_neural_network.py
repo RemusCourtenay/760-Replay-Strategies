@@ -1,3 +1,5 @@
+from typing import Tuple, List
+
 from models.neural_network import NeuralNetwork
 from data.data_set import DataSet
 import tensorflow as tf
@@ -24,7 +26,8 @@ class DefaultNeuralNetwork(NeuralNetwork):
         self.model.add(tf.keras.layers.Dense(dense_layer_size))
 
     # function to train model on specified training set and test set
-    def train(self, data_set: DataSet, epochs) -> 'tuple[float, float]':
+    # TODO... fix this method because it is broken
+    def train(self, data_set: DataSet, epochs) -> Tuple[List[float], List[float]]:
         # define optimizer and loss function to use
         self.model.compile(optimizer=self.DEFAULT_OPTIMIZER,
                            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),

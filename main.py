@@ -8,9 +8,8 @@ from art.default_artist import DefaultArtist
 import tensorflow as tf
 
 
-def run_selection_strategy(strategy: SelectionStrategy):
+def run_selection_strategy(strategy: SelectionStrategy) -> None:
     strategy.run()
-    return
 
 
 def evaluate_strategy(policy) -> None:

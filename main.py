@@ -2,7 +2,7 @@ from data.mnist_data_set import MnistDataSet
 from models.simple_cnn import SimpleCNN as NeuralNetwork
 from strategies.random_selection_strategy import RandomSelectionStrategy
 from strategies.no_selection_strategy import NoSelectionStrategy
-from strategies.forgetting_metric_strategy import ForgettingStrategy
+from strategies.forgetting_metric_strategy import ForgettingSelectionStrategy
 from strategies.selection_strategy import SelectionStrategy
 from art.default_artist import DefaultArtist
 import tensorflow as tf
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # instantiate one dataset to train all models
     dataset = MnistDataSet()
 
-    forgetting_selection = ForgettingStrategy(NeuralNetwork(), dataset, DefaultArtist(), 'Forgetting selection')
+    forgetting_selection = ForgettingSelectionStrategy(NeuralNetwork(), dataset, DefaultArtist(), 'Forgetting selection')
     print('Running Forgetting Metric Strategy. . .')
     run_selection_strategy(forgetting_selection)
 

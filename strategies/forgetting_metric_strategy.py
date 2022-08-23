@@ -6,7 +6,7 @@ from models.simple_cnn import SimpleCNN as NeuralNetwork
 from strategies.selection_strategy import SelectionStrategy
 
 
-class ForgettingStrategy(SelectionStrategy):
+class ForgettingSelectionStrategy(SelectionStrategy):
 
     def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist, policy_name, memory_percent=0, epochs=0):
         self.model = model

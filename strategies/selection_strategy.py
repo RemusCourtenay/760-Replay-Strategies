@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Tuple, List
 
 from art.artist import Artist
 from models.neural_network import NeuralNetwork
@@ -36,7 +37,7 @@ class SelectionStrategy(ABC):
 
         self.artist.draw()
 
-    def train_model(self) -> 'tuple[float, float]':
+    def train_model(self) -> Tuple[List[float], List[float]]:
         return self.model.train(self.data, self.epochs)
 
     @abstractmethod

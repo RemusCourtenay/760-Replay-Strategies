@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+from typing import Tuple, List
 
 from art.artist import Artist
 from data.mnist_data_set import MnistDataSet as DataSet
@@ -13,9 +14,6 @@ class RandomSelectionStrategy(SelectionStrategy):
 
     def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist, memory_percent=0.05, epochs=10):
         super().__init__(model, data, artist, self.STRATEGY_NAME, memory_percent, epochs)
-
-    def setMemory(self, percent):
-        self.memory_percent = percent
 
     def select_memories(self, percentage: int) -> None:
         old_training_data = self.data.get_training_set()
@@ -42,7 +40,7 @@ class RandomSelectionStrategy(SelectionStrategy):
 
     def run(self) -> None:
         for i in range(self.data.NUM_TASKS):
-            print('==== task %d =====' %(i + 1))
+            print('==== task %d =====' % (i + 1))
             # only update replay memory if not the first task
             if i > 0:
                 self.select_memories(self.memory_percent)
@@ -55,7 +53,7 @@ class RandomSelectionStrategy(SelectionStrategy):
         # # draw plot
         # self.artist.draw()
 
-    def train_model(self) -> 'tuple[list[float], list[float]]':
+    def train_model(self) -> Tuple[List[float], List[float]]:
         training_accuracy, test_accuracy = self.model.train(self.data, self.epochs)
         return training_accuracy, test_accuracy
 

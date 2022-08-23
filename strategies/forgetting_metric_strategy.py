@@ -1,6 +1,5 @@
 import numpy as np
 import tensorflow as tf
-import random
 from art.artist import Artist
 from data.mnist_data_set import MnistDataSet as DataSet
 from models.simple_cnn import SimpleCNN as NeuralNetwork

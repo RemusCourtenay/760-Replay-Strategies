@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Tuple, List
 
 from data.data_set import DataSet
+from data.task import TaskResult
 
 
 class NeuralNetwork(ABC):
@@ -10,5 +10,9 @@ class NeuralNetwork(ABC):
         self.model = model
 
     @abstractmethod
-    def train(self, training_data: DataSet, epochs) -> Tuple[List[float], List[float]]:
+    def reset(self) -> None:
+        pass
+
+    @abstractmethod
+    def train_task(self, training_data: DataSet, epochs) -> TaskResult:
         pass

@@ -4,14 +4,6 @@ from art.artist import Artist
 from strategies.selection_strategy import SelectionStrategy
 from typing import List
 
-
-class ScriptParameters:
-
-    def __init__(self, num_memories, epochs):
-        self.num_memories = num_memories
-        self.epochs = epochs
-
-
 class Script:
     """Defines the run variables for a set of selection strategies and handles the running of them"""
 
@@ -34,6 +26,10 @@ class Script:
 
     def run_dataset(self, dataset: DataSet):
         for strategy in self.strategies:
+
+            # Reset model to initial state
+            self.model.reset()
+
             for i in range(dataset.get_num_tasks()):
                 # Get the currently active task to be learned
                 task = dataset.get_task()
@@ -45,10 +41,10 @@ class Script:
                 self.artist.add_results(i, task_results)
 
                 # Generate a set of suitable memories based off of the task and the task results
-                memories = strategy.select_memories(task, task_results, self.parameters.num_memories)
+                memory_set, memory_labels = strategy.select_memories(task, task_results, self.parameters.num_memories)
 
                 # Update the dataset with the new memories
-                dataset.update_training_set(memories)
+                dataset.update_training_set(memory_set, memory_labels)
 
 
 

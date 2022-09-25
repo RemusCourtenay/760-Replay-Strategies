@@ -1,23 +1,19 @@
 import numpy as np
-import tensorflow as tf
 from typing import Tuple, List
 
-from art.artist import Artist
-from data.mnist_data_set import MnistDataSet as DataSet
-from models.simple_cnn import SimpleCNN as NeuralNetwork
+from data.task import Task, TaskResult
 from strategies.selection_strategy import SelectionStrategy
 
 
 class RandomSelectionStrategy(SelectionStrategy):
-
     STRATEGY_NAME = "Random Selection Strategy"
 
-    def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist, memory_percent=0.05, epochs=10):
-        super().__init__(model, data, artist, self.STRATEGY_NAME, memory_percent, epochs)
+    def __init__(self, strategy_name=STRATEGY_NAME):
+        super().__init__(strategy_name)
 
-    def select_memories(self, percentage: int) -> None:
-        old_training_data = self.data.get_training_set()
-        old_training_labels = self.data.get_training_labels()
+    def select_memories(self, task: Task, task_result: TaskResult, num_memories: int) -> Tuple[List, List]:
+        old_training_data = task.training_set
+        old_training_labels = task.training_labels
 
         n = len(old_training_data)
         # create an array of indexes to shuffle
@@ -27,57 +23,8 @@ class RandomSelectionStrategy(SelectionStrategy):
         old_data_subset = old_training_data[s]
         old_label_subset = old_training_labels[s]
 
-        # cut subset down to desired size (use the parameter directly if it is an integer > 1)
-        if percentage > 1:
-            old_data_subset = old_data_subset[:int(percentage)]
-            old_label_subset = old_label_subset[:int(percentage)]
-        else:
-            old_data_subset = old_data_subset[:int(n * percentage)]
-            old_label_subset = old_label_subset[:int(n * percentage)]
+        # cut subset down to desired size
+        old_data_subset = old_data_subset[:num_memories]
+        old_label_subset = old_label_subset[:num_memories]
 
-        # Update data object's current training data
-        self.data.update_training_set(old_data_subset, old_label_subset)
-
-    def run(self) -> None:
-        for i in range(self.data.NUM_TASKS):
-            print('==== task %d =====' % (i + 1))
-            # only update replay memory if not the first task
-            if i > 0:
-                self.select_memories(self.memory_percent)
-            training_accuracy, test_accuracy = self.train_model()
-            self.artist.add_results(training_accuracy, test_accuracy)
-
-        # evaluate final accuracy on the 3 sets
-        # self.final_evaluate()
-
-        # # draw plot
-        # self.artist.draw()
-
-    def train_model(self) -> Tuple[List[float], List[float]]:
-        training_accuracy, test_accuracy = self.model.train(self.data, self.epochs)
-        return training_accuracy, test_accuracy
-
-
-    def final_evaluate(self) -> None:
-        model = self.model.model
-
-        # get testing data and labels for individual tasks
-        task1_data = tf.convert_to_tensor(self.data.test_tasks[0][0])
-        task1_label = tf.convert_to_tensor(self.data.test_tasks[0][1])
-        task2_data = tf.convert_to_tensor(self.data.test_tasks[1][0])
-        task2_label = tf.convert_to_tensor(self.data.test_tasks[1][1])
-
-        all_test_data = tf.convert_to_tensor(self.data.validation_data)
-        all_test_label = tf.convert_to_tensor(self.data.validation_labels)
-
-
-        print('===== Final Accuracy =====')
-        print('Evaluation of Task 1 tests')
-        model.evaluate(task1_data, task1_label, verbose=2)
-        print('==========================')
-        print('Evaluation of Task 2 tests')
-        model.evaluate(task2_data, task2_label, verbose=2)
-        print('==========================')
-        print('Evaluation of all tests')
-        model.evaluate(all_test_data, all_test_label, verbose=2)
-        print('==========================')
+        return old_data_subset, old_label_subset

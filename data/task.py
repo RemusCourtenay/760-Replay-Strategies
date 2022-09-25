@@ -1,5 +1,7 @@
 from typing import List
 
+from tensorflow.python.keras.callbacks import History
+
 
 class Task:
 
@@ -16,6 +18,5 @@ class Task:
 
 class TaskResult:
 
-    def __init__(self):
-        # TODO..
-        pass
+    def __init__(self, task_history: History):
+        self.task_history = task_history

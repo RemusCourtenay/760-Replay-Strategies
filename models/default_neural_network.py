@@ -1,12 +1,12 @@
 from typing import Tuple, List
 
+from data.task import Task, TaskResult
 from models.neural_network import NeuralNetwork
 from data.data_set import DataSet
 import tensorflow as tf
 
 
 class DefaultNeuralNetwork(NeuralNetwork):
-
     DEFAULT_OPTIMIZER = 'adam'
     ACCURACY_METRIC_TAG = 'accuracy'
 
@@ -25,19 +25,21 @@ class DefaultNeuralNetwork(NeuralNetwork):
         self.model.add(tf.keras.layers.Dense(dense_layer_size, activation=activation_type))
         self.model.add(tf.keras.layers.Dense(dense_layer_size))
 
-    # function to train model on specified training set and test set
-    # TODO... fix this method because it is broken
-    def train(self, data_set: DataSet, epochs) -> Tuple[List[float], List[float]]:
         # define optimizer and loss function to use
         self.model.compile(optimizer=self.DEFAULT_OPTIMIZER,
                            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                            metrics=[self.ACCURACY_METRIC_TAG])
 
+    def reset(self) -> None:
+        pass
+
+    # function to train model on specified task
+    def train_task(self, task: Task, epochs) -> TaskResult:
+        history = None
+
         for i in range(epochs):
-            history = self.model.fit(data_set.get_training_set(), data_set.get_training_labels())
-            train_loss, train_accuracy = self.model.evaluate(data_set.get_validation_set(),
-                                                             data_set.get_validation_labels(), verbose=2)
+            history = self.model.fit(task.training_set, task.training_labels,
+                                     validation_data=(task.validation_set, task.validation_labels))
 
-            # return accuracy for display purposes
-            return history.history[self.ACCURACY_METRIC_TAG], train_accuracy
-
+        # return TaskResults
+        return TaskResult(history)

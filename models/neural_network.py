@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
-from data.data_set import DataSet
-from data.task import TaskResult
+from data.task import TaskResult, Task
 
 
 class NeuralNetwork(ABC):
@@ -14,5 +13,5 @@ class NeuralNetwork(ABC):
         pass
 
     @abstractmethod
-    def train_task(self, training_data: DataSet, epochs) -> TaskResult:
+    def train_task(self, task: Task, epochs) -> TaskResult:
         pass

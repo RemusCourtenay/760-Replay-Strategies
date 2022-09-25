@@ -1,8 +1,10 @@
 from data.data_set import DataSet
 from models.neural_network import NeuralNetwork
 from art.artist import Artist
+from scripts.script_parameters import ScriptParameters
 from strategies.selection_strategy import SelectionStrategy
 from typing import List
+
 
 class Script:
     """Defines the run variables for a set of selection strategies and handles the running of them"""
@@ -45,6 +47,3 @@ class Script:
 
                 # Update the dataset with the new memories
                 dataset.update_training_set(memory_set, memory_labels)
-
-
-

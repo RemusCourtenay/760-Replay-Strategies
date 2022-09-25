@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from data.task import TaskResult
+
 
 class Artist(ABC):
 
@@ -8,25 +10,5 @@ class Artist(ABC):
         pass
 
     @abstractmethod
-    def add_results(self, training_data, validation_data) -> None:
-        pass
-
-    @abstractmethod
-    def draw_comparisons(self, other_artist) -> None:
-        pass
-
-    @abstractmethod
-    def add_policy_name(self, name) -> None:
-        pass
-
-    @abstractmethod
-    def draw_multiple_comparisons(self, other_policies: list) -> None:
-        pass
-
-
-
-
-    # temp function to output demonstration graph
-    @abstractmethod
-    def draw_demonstration(self, CNNModel):
+    def add_results(self, strategy_number: int, task_results: TaskResult) -> None:
         pass

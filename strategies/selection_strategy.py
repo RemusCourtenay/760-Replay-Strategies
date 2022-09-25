@@ -11,9 +11,5 @@ class SelectionStrategy(ABC):
         self.strategy_name = strategy_name
 
     @abstractmethod
-    def select_memories(self, percentage: float) -> None:
-        pass
-
-    @abstractmethod
-    def train(self, task: Task) -> TaskResult:
+    def select_memories(self, num_memories) -> List[]:
         pass

@@ -5,6 +5,10 @@ import numpy as np
 class DataSet(ABC):
 
     @abstractmethod
+    def get_num_tasks(self) -> int:
+        pass
+
+    @abstractmethod
     def update_training_set(self, selected_memory_data, selected_memory_labels):
         """Updates the currently selected training set by choosing a new task/tasks to train on and then adding any
         old data values that the selection policy decided to keep."""

@@ -86,6 +86,6 @@ class MnistDataSet(DataSet):
 
 
 ### debug ###
-data = MnistDataSet(labels_per_task=3, debug=True)
-for i in range(data.num_tasks):
-    print('First 10 labels for Task %d: ' % i, data.train_tasks[i][1][:10], 'number of images:', len(data.train_tasks[i][1]))
+# data = MnistDataSet(labels_per_task=3, debug=True)
+# for i in range(data.num_tasks):
+#     print('First 10 labels for Task %d: ' % i, data.train_tasks[i][1][:10], 'number of images:', len(data.train_tasks[i][1]))

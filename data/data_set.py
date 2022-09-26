@@ -25,17 +25,29 @@ class DataSet(ABC):
         pass
 
 
-def build_tasks(training_images, training_labels, num_tasks: int, num_labels_per_task: int) \
-        -> 'list[list[list, list]]':
+def build_tasks(training_images, training_labels, num_tasks: int, num_labels_per_task: int, num_labels: int):
     # cursed list instantiation
-    tasks = [[[], []] for _ in range(num_tasks)]
+    train_tasks = [[[], []] for _ in range(num_tasks)]
+
+    # create array of labels to generate random ordering in tasks
+    labels = np.arange(0, num_labels)
+    # shuffle labels
+    np.random.shuffle(labels)
+    # store the labels in an array then split the shuffled labels into specified number of tasks
+    task_labels = []
+    for i in range(num_tasks):
+        task_labels.append(labels[i * num_labels_per_task:((i * num_labels_per_task) + num_labels_per_task)])
 
     for image, label in zip(training_images, training_labels):
-        task_num = int(label / num_labels_per_task)
-        tasks[task_num][0].append(image)
-        tasks[task_num][1].append(label)
+        # find out which task the data should belong to by checking with all the task_labels
+        for i in range(num_tasks):
+            if label in task_labels[i]:
+                task_num = i
+                break
+        train_tasks[task_num][0].append(image)
+        train_tasks[task_num][1].append(label)
 
-    return tasks
+    return train_tasks
 
 
 # Shuffles data for a given dataset and label
@@ -54,3 +66,5 @@ def shuffle_data(data, label):
     randomised_label = label[indexes]
 
     return randomised_data, randomised_label
+
+

@@ -18,3 +18,15 @@ You can then either click on the link or open your browser and type it into the 
 
 <img src="resources/readme/tensorboard-main-page.png" alt="TensorBoard main page">
 
+## How to use Scripts
+
+In main.py we are using Script objects to define which strategies we want to test and which models we want to test them on.
+Scripts take five inputs as shown below:
+
+<img src="resources/readme/script-setup.png" alt="Script setup">
+
+- The neural network you want to use to run the tests with
+- The artist that you want to use to output the results
+- The list of strategies that you want to use (these are run separately)
+- The datasets that you want to use (also run separately)
+- The hyper-parameters to be used

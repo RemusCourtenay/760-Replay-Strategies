@@ -1,17 +1,18 @@
 from data.data_set import DataSet
 import numpy as np
 import tensorflow as tf
-
+import math
 
 class MnistDataSet(DataSet):
 
     NUM_LABELS = 10
-    LABELS_PER_TASK = 5
 
-    def __init__(self):
+    def __init__(self, labels_per_task, debug=False):
+        self.debug = debug
+        self.labels_per_task = labels_per_task
         (train_images, train_labels), (test_images, test_labels) = tf.keras.datasets.fashion_mnist.load_data()
-        self.NUM_TASKS = int(self.NUM_LABELS / self.LABELS_PER_TASK)
-        self.train_tasks, self.test_tasks = self.build_tasks(train_images, train_labels, test_images, test_labels, self.NUM_TASKS, self.LABELS_PER_TASK, self.NUM_LABELS)
+        self.num_tasks = math.ceil(self.NUM_LABELS / self.labels_per_task)
+        self.train_tasks = self.__build_tasks(train_images, train_labels, self.num_tasks, self.labels_per_task, self.NUM_LABELS)
         self.validation_data = test_images
         self.validation_labels = test_labels
         self.current_task = 0
@@ -32,11 +33,13 @@ class MnistDataSet(DataSet):
         self.current_training_data = new_training_data
         self.current_training_labels = new_training_labels
 
-    def get_tasks(self):
-        pass
+    def get_task(self):
+        return self.current_training_data
+
 
     # function to reset current task back to first task (used when multiple NN share one dataset)
-    def reset_tasks(self):
+    def reset(self):
+        self.current_task = 0
         self.current_training_data = np.array(self.train_tasks[0][0])
         self.current_training_labels = np.array(self.train_tasks[0][1])
 
@@ -52,45 +55,37 @@ class MnistDataSet(DataSet):
     def get_validation_labels(self):
         return self.validation_labels.copy()
 
-    def get_task_validation_set(self, task_number):
-        return self.test_tasks[task_number][0]
 
-    def get_task_validation_labels(self, task_number):
-        return self.test_tasks[task_number][0]
-
-
-            # randomly split training data and test data into 2 tasks with 5 random labels in each
-    def build_tasks(self, training_images, training_labels, test_images, test_labels, num_tasks: int, num_labels_per_task: int, num_labels: int) \
+    def __build_tasks(self, training_images, training_labels, num_tasks: int, num_labels_per_task: int, num_labels: int) \
             -> 'list[list[list, list]], list[list[list, list]]':
 
         # cursed list instantiation
         train_tasks = [[[], []] for _ in range(num_tasks)]
-        test_tasks = [[[], []] for _ in range(num_tasks)]
 
-        # create array of labels
+        # create array of labels to generate random ordering in tasks
         labels = np.arange(0, num_labels)
         # shuffle labels
         np.random.shuffle(labels)
-        # take the first num_labels_per_task of labels as task 1
-        labels = labels[:num_labels_per_task]
+        # store the labels in an array then split the shuffled labels into specified number of tasks
+        task_labels = []
+        for i in range(num_tasks):
+            task_labels.append(labels[i * num_labels_per_task:((i * num_labels_per_task) + num_labels_per_task)])
+        if self.debug:
+            print(task_labels)
+
         for image, label in zip(training_images, training_labels):
-            # split into 2 tasks
-            if label in labels:
-                task_num = 0
-            else:
-                task_num = 1
+            # find out which task the data should belong to by checking with all the task_labels
+            for i in range(num_tasks):
+                if label in task_labels[i]:
+                    task_num = i
+                    break
             train_tasks[task_num][0].append(image)
             train_tasks[task_num][1].append(label)
 
-        for image, label in zip(test_images, test_labels):
+        return train_tasks
 
-            # split into 2 tasks
-            if label in labels:
-                task_num = 0
-            else:
-                task_num = 1
 
-            test_tasks[task_num][0].append(image)
-            test_tasks[task_num][1].append(label)
-
-        return train_tasks, test_tasks
+### debug ###
+data = MnistDataSet(labels_per_task=3, debug=True)
+for i in range(data.num_tasks):
+    print('First 10 labels for Task %d: ' % i, data.train_tasks[i][1][:10], 'number of images:', len(data.train_tasks[i][1]))

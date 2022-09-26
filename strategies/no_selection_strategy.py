@@ -1,11 +1,8 @@
 from typing import List, Tuple
 
-from art.artist import Artist
-from data.mnist_data_set import MnistDataSet as DataSet
-from data.task import TaskResult, Task
-from models.simple_cnn import SimpleCNN as NeuralNetwork
+from data.task import Task
+from data.task_result import TaskResult
 from strategies.selection_strategy import SelectionStrategy
-import tensorflow as tf
 
 
 class NoSelectionStrategy(SelectionStrategy):
@@ -15,5 +12,5 @@ class NoSelectionStrategy(SelectionStrategy):
         super().__init__(strategy_name)
 
     def select_memories(self, task: Task, task_results: TaskResult, num_memories: int) -> Tuple[List, List]:
-        # We don't choose any memories so just pass None to let the update function know
+        # We don't choose any memories so just pass empty lists to let the update function know
         return [], []

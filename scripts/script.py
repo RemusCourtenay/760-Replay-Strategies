@@ -49,6 +49,7 @@ class Script:
 
                 # Train the model on the task
                 task_results = self.model.train_task(task, self.parameters.epochs)
+                task_results.set_strategy_name(strategy.strategy_name)
 
-                # Send results to the artist for display or storage
-                self.artist.add_results(i, task_results)
+                # Send results to the artist for display/storage
+                self.artist.add_results(task_results)

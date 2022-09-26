@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 
-from models.neural_network import NeuralNetwork
-from data.task import Task, TaskResult
+from data.task import Task
+from data.task_result import TaskResult
 
 
 class SelectionStrategy(ABC):

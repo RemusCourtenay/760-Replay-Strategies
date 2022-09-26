@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from art.artist import Artist
-from data.task import TaskResult
+from data.task_result import TaskResult
 
 
 class DefaultArtist(Artist):
@@ -12,10 +12,10 @@ class DefaultArtist(Artist):
 
         print(self.results_dict)
 
-    def add_results(self, strategy_number: int, task_results: TaskResult) -> None:
+    def add_results(self, task_results: TaskResult) -> None:
 
-        if self.results_dict.get(strategy_number) is None:
-            self.results_dict[strategy_number] = []
+        if self.results_dict.get(task_results.strategy_name) is None:
+            self.results_dict[task_results.strategy_name] = []
 
-        self.results_dict[strategy_number].append(task_results)
+        self.results_dict[task_results.strategy_name].append(task_results)
 

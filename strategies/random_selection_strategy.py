@@ -1,7 +1,8 @@
 import numpy as np
 from typing import Tuple, List
 
-from data.task import Task, TaskResult
+from data.task import Task
+from data.task_result import TaskResult
 from strategies.selection_strategy import SelectionStrategy
 
 

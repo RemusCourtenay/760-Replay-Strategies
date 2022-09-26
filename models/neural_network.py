@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
-from data.task import TaskResult, Task
+from data.task import Task
+from data.task_result import TaskResult
 
 
 class NeuralNetwork(ABC):

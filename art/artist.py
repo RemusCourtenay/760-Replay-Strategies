@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from data.task import TaskResult
+from data.task_result import TaskResult
 
 
 class Artist(ABC):
@@ -10,5 +10,5 @@ class Artist(ABC):
         pass
 
     @abstractmethod
-    def add_results(self, strategy_number: int, task_results: TaskResult) -> None:
+    def add_results(self, task_results: TaskResult) -> None:
         pass

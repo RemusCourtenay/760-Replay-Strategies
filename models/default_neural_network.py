@@ -1,6 +1,7 @@
 from typing import Tuple, List
 
-from data.task import Task, TaskResult
+from data.task import Task
+from data.task_result import TaskResult
 from models.neural_network import NeuralNetwork
 from data.data_set import DataSet
 import tensorflow as tf
@@ -35,11 +36,11 @@ class DefaultNeuralNetwork(NeuralNetwork):
 
     # function to train model on specified task
     def train_task(self, task: Task, epochs) -> TaskResult:
-        history = None
 
-        for i in range(epochs):
-            history = self.model.fit(task.training_set, task.training_labels,
-                                     validation_data=(task.validation_set, task.validation_labels))
+        history = self.model.fit(task.training_set,
+                                 task.training_labels,
+                                 epochs=epochs,
+                                 validation_data=(task.validation_set, task.validation_labels))
 
         # return TaskResults
         return TaskResult(history)

@@ -12,6 +12,6 @@ if __name__ == "__main__":
                     DefaultArtist(),
                     [RandomSelectionStrategy(), NoSelectionStrategy()],
                     [FashionDataSet(), MnistDataSet()],
-                    ScriptParameters(100, 1))  # TODO... put real numbers here
+                    ScriptParameters(100, 2))  # TODO... put real numbers here
 
     script.run()

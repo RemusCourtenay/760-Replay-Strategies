@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Tuple, List
 
 from data.task import Task
@@ -32,7 +33,8 @@ class DefaultNeuralNetwork(NeuralNetwork):
                            metrics=[self.ACCURACY_METRIC_TAG])
         self.probability_model = tf.keras.Sequential([self.model, tf.keras.layers.Softmax()])
 
-        self.tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir="./logs")
+        log_dir = "logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+        self.tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir)
 
     def reset(self) -> NeuralNetwork:
         return DefaultNeuralNetwork()

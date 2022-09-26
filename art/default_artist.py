@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from art.artist import Artist
 from data.task_result import TaskResult
 
@@ -9,8 +8,7 @@ class DefaultArtist(Artist):
         self.results_dict = {}
 
     def draw(self) -> None:
-
-        print(self.results_dict)
+        pass
 
     def add_results(self, task_results: TaskResult) -> None:
 

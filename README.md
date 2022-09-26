@@ -30,3 +30,8 @@ Scripts take five inputs as shown below:
 - The list of strategies that you want to use (these are run separately)
 - The datasets that you want to use (also run separately)
 - The hyper-parameters to be used
+
+In this example the script will run four different tests with both strategies attempting both datasets. It will also
+use the default neural network and artist and run the tests with 1000 memories per task and 10 epochs 
+(as defined by the script parameters).
+

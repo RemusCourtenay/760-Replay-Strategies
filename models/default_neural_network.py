@@ -3,8 +3,8 @@ from typing import Tuple, List
 from data.task import Task
 from data.task_result import TaskResult
 from models.neural_network import NeuralNetwork
-from data.data_set import DataSet
 import tensorflow as tf
+import numpy as np
 
 
 class DefaultNeuralNetwork(NeuralNetwork):
@@ -30,6 +30,7 @@ class DefaultNeuralNetwork(NeuralNetwork):
         self.model.compile(optimizer=self.DEFAULT_OPTIMIZER,
                            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                            metrics=[self.ACCURACY_METRIC_TAG])
+        self.probability_model = tf.keras.Sequential([self.model, tf.keras.layers.Softmax()])
 
     def reset(self) -> NeuralNetwork:
         return DefaultNeuralNetwork()
@@ -42,5 +43,9 @@ class DefaultNeuralNetwork(NeuralNetwork):
                                  epochs=epochs,
                                  validation_data=(task.validation_set, task.validation_labels))
 
+        predictions = []
+        for i in range(epochs):
+            predictions.append(self.probability_model.predict(task.training_set, verbose=2))
+
         # return TaskResults
-        return TaskResult(history)
+        return TaskResult(history, predictions)

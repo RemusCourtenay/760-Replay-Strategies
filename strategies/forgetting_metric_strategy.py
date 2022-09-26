@@ -107,24 +107,24 @@ class ForgettingSelectionStrategy(SelectionStrategy):
     #             else:
     #                 stat[i] = [np.argmax(predictions[i]) == train_label[i]]
     #
-    #     forgetness = {}
-    #
-    #     for index, lst in stat.items():
-    #         acc_full = np.array(list(map(int, lst)))
-    #         transition = acc_full[1:] - acc_full[:-1]
-    #         if len(np.where(transition == -1)[0]) > 0:
-    #             forgetness[index] = len(np.where(transition == -1)[0])
-    #         elif len(np.where(acc_full == 1)[0]) == 0:
-    #             forgetness[index] = epochs
-    #         else:
-    #             forgetness[index] = 0
-    #
-    #     # print(dict(sorted(forgetness.items(), key = lambda item: item[1], reverse = True)))
-    #     result = []
-    #     for i, j in forgetness.items():
-    #         if j == epochs:
-    #             result.append(i)
-    #
-    #     if self.forgetness is None:
-    #         self.forgetness = result
-    #     return train_accuracy, test_accuracy
+        forgetness = {}
+
+        for index, lst in stat.items():
+            acc_full = np.array(list(map(int, lst)))
+            transition = acc_full[1:] - acc_full[:-1]
+            if len(np.where(transition == -1)[0]) > 0:
+                forgetness[index] = len(np.where(transition == -1)[0])
+            elif len(np.where(acc_full == 1)[0]) == 0:
+                forgetness[index] = epochs
+            else:
+                forgetness[index] = 0
+
+        # print(dict(sorted(forgetness.items(), key = lambda item: item[1], reverse = True)))
+        result = []
+        for i, j in forgetness.items():
+            if j == epochs:
+                result.append(i)
+
+        if self.forgetness is None:
+            self.forgetness = result
+        return train_accuracy, test_accuracy

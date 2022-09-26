@@ -32,16 +32,18 @@ class DefaultNeuralNetwork(NeuralNetwork):
                            metrics=[self.ACCURACY_METRIC_TAG])
         self.probability_model = tf.keras.Sequential([self.model, tf.keras.layers.Softmax()])
 
+        self.tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir="./logs")
+
     def reset(self) -> NeuralNetwork:
         return DefaultNeuralNetwork()
 
     # function to train model on specified task
     def train_task(self, task: Task, epochs) -> TaskResult:
-
         history = self.model.fit(task.training_set,
                                  task.training_labels,
                                  epochs=epochs,
-                                 validation_data=(task.validation_set, task.validation_labels))
+                                 validation_data=(task.validation_set, task.validation_labels),
+                                 callbacks=[self.tensorboard_callback])
 
         predictions = []
         for i in range(epochs):

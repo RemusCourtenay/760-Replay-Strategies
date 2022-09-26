@@ -14,29 +14,74 @@ class ForgettingSelectionStrategy(SelectionStrategy):
 
     STRATEGY_NAME = "Forgetting Selection Strategy"
 
-    def __init__(self):
+    # def __init__(self):
+    #     super().__init__(self.STRATEGY_NAME)
+    
+    # Forgetting statistics is obtained through another NN
+    def __init__(self, model: NeuralNetwork):
+        self.model = model
         super().__init__(self.STRATEGY_NAME)
-
+        
     def select_memories(self, task: Task, task_result: TaskResult, num_memories: int) -> Tuple[List, List]:
 
         old_training_data = task.training_set
         old_training_labels = task.training_labels
 
         # Predictions is a list of prediction arrays ordered by epoch.
-        predictions = task_result.get_predictions()
+        # predictions = task_result.get_predictions()
+        
+        ### new codes below
+        model = self.model.model
+        # define optimizer and loss function to use
+        opt = tf.keras.optimizers.SGD(learning_rate=0.01)
+  
+        model.compile(optimizer=opt,
+                      loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                      metrics=['accuracy'])
+        stat = {}
+        # default epoch = 10 for calculating forgetting statistics
+        for i in range(10):
+            history = model.fit(old_training_data, old_training_labels , verbose=0)
+            probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
+            predictions = probability_model.predict(old_training_data, verbose=0)
+            for i in range(len(old_training_data)):
+                if i in stat:
+                    stat[i].append(np.argmax(predictions[i]) == old_training_labels[i])
+                else:
+                    stat[i] = [np.argmax(predictions[i]) == old_training_labels[i]]
 
-
-
-
+        forgetness = {}
+        for index, lst in stat.items():
+            acc_full = np.array(list(map(int, lst)))
+            transition = acc_full[1:] - acc_full[:-1]
+            if len(np.where(transition == -1)[0]) > 0:
+                forgetness[index] = len(np.where(transition == -1)[0])
+            elif len(np.where(acc_full == 1)[0]) == 0:
+                forgetness[index] = epochs
+            else:
+                forgetness[index] = 0
+                
+        forgetness = dict(sorted(forgetness.items(), key = lambda item: item[1], reverse = True))
+        
+        old_data_subset = []
+        old_label_subset = []
+        for i, j in forgetness.items():
+            if len(old_data_subset) <= num_memories:
+                old_data_subset.append(old_training_data[i])
+                old_label_subset.append(old_training_labels[i])      
+        
+        return old_data_subset, old_label_subset
+        ### up to this point
+        
         # OLD CODE ------
-        old_training_data = self.data.get_training_set()
-        old_training_labels = self.data.get_training_labels()
+        # old_training_data = self.data.get_training_set()
+        # old_training_labels = self.data.get_training_labels()
 
-        new_data = old_training_data[self.forgetness]
-        new_label = old_training_labels[self.forgetness]
+        # new_data = old_training_data[self.forgetness]
+        # new_label = old_training_labels[self.forgetness]
 
         # Update data object's current training data
-        self.data.update_training_set(new_data, new_label)
+        # self.data.update_training_set(new_data, new_label)
 
     # def __init__(self, model: NeuralNetwork, data: DataSet, artist: Artist, policy_name, memory_percent=0, epochs=0):
     #     self.model = model
@@ -111,24 +156,24 @@ class ForgettingSelectionStrategy(SelectionStrategy):
     #             else:
     #                 stat[i] = [np.argmax(predictions[i]) == train_label[i]]
     #
-        forgetness = {}
+    #     forgetness = {}
 
-        for index, lst in stat.items():
-            acc_full = np.array(list(map(int, lst)))
-            transition = acc_full[1:] - acc_full[:-1]
-            if len(np.where(transition == -1)[0]) > 0:
-                forgetness[index] = len(np.where(transition == -1)[0])
-            elif len(np.where(acc_full == 1)[0]) == 0:
-                forgetness[index] = epochs
-            else:
-                forgetness[index] = 0
+    #     for index, lst in stat.items():
+    #         acc_full = np.array(list(map(int, lst)))
+    #         transition = acc_full[1:] - acc_full[:-1]
+    #         if len(np.where(transition == -1)[0]) > 0:
+    #             forgetness[index] = len(np.where(transition == -1)[0])
+    #         elif len(np.where(acc_full == 1)[0]) == 0:
+    #             forgetness[index] = epochs
+    #         else:
+    #             forgetness[index] = 0
 
         # print(dict(sorted(forgetness.items(), key = lambda item: item[1], reverse = True)))
-        result = []
-        for i, j in forgetness.items():
-            if j == epochs:
-                result.append(i)
+    #     result = []
+    #     for i, j in forgetness.items():
+    #         if j == epochs:
+    #             result.append(i)
 
-        if self.forgetness is None:
-            self.forgetness = result
-        return train_accuracy, test_accuracy
+    #     if self.forgetness is None:
+    #         self.forgetness = result
+    #     return train_accuracy, test_accuracy

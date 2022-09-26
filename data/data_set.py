@@ -1,11 +1,14 @@
+import math
 from abc import ABC, abstractmethod
 import numpy as np
 
 
 class DataSet(ABC):
 
-    def __init__(self, num_tasks: int):
-        self.num_tasks = num_tasks
+    def __init__(self, num_labels: int, num_labels_per_task: int):
+        self.num_labels = num_labels
+        self.num_labels_per_task = num_labels_per_task
+        self.num_tasks = math.ceil(self.num_labels / self.num_labels_per_task)
 
     def get_num_tasks(self) -> int:
         return self.num_tasks

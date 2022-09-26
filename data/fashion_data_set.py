@@ -10,18 +10,16 @@ from data.task import Task
 
 
 class FashionDataSet(DataSet):
-    Image = npt.NDArray[np.int_]
 
-    NUM_TASKS = 5
-    LABELS_PER_TASK = 2
+    NUM_LABELS = 10
 
-    def __init__(self):
-        super().__init__(self.NUM_TASKS)
+    def __init__(self, num_labels_per_task=2, labelled_validation=True):
+        super().__init__(self.NUM_LABELS, num_labels_per_task)
 
         (train_images, train_labels), (test_images, test_labels) = tf.keras.datasets.fashion_mnist.load_data()
 
-        self.tasks = build_tasks(train_images, train_labels, self.NUM_TASKS, self.LABELS_PER_TASK)
-        self.task_validations = build_tasks(test_images, test_labels, self.NUM_TASKS, self.LABELS_PER_TASK)
+        self.tasks = build_tasks(train_images, train_labels, self.num_tasks, self.num_labels_per_task)
+        self.task_validations = build_tasks(test_images, test_labels, self.num_tasks, self.num_labels_per_task)
         self.current_task = Task(0,
                                  self.tasks[0][0], self.tasks[0][1],
                                  self.task_validations[0][0], self.task_validations[0][1])

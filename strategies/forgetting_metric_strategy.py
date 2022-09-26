@@ -17,6 +17,14 @@ class ForgettingSelectionStrategy(SelectionStrategy):
         super().__init__(self.STRATEGY_NAME)
 
     def select_memories(self, task: Task, task_result: TaskResult, num_memories: int) -> Tuple[List, List]:
+
+        old_training_data = task.training_set
+        old_training_labels = task.training_labels
+
+
+
+
+        # OLD CODE ------
         old_training_data = self.data.get_training_set()
         old_training_labels = self.data.get_training_labels()
 

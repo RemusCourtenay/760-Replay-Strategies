@@ -30,8 +30,8 @@ class DefaultNeuralNetwork(NeuralNetwork):
                            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                            metrics=[self.ACCURACY_METRIC_TAG])
 
-    def reset(self) -> None:
-        pass
+    def reset(self) -> NeuralNetwork:
+        return DefaultNeuralNetwork()
 
     # function to train model on specified task
     def train_task(self, task: Task, epochs) -> TaskResult:

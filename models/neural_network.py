@@ -9,7 +9,7 @@ class NeuralNetwork(ABC):
         self.model = model
 
     @abstractmethod
-    def reset(self) -> None:
+    def reset(self):
         pass
 
     @abstractmethod

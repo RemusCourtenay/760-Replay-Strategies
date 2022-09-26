@@ -30,9 +30,20 @@ class Script:
         for strategy in self.strategies:
 
             # Reset model to initial state
-            self.model.reset()
+            self.model = self.model.reset()
+            dataset = dataset.reset()
 
             for i in range(dataset.get_num_tasks()):
+
+                if i > 0:
+                    # Generate a set of suitable memories based off of the task and the task results
+                    # noinspection PyUnboundLocalVariable
+                    memory_set, memory_labels = strategy.select_memories(task, task_results,
+                                                                         self.parameters.num_memories)
+
+                    # Update the dataset with the new memories
+                    dataset.update_training_set(memory_set, memory_labels)
+
                 # Get the currently active task to be learned
                 task = dataset.get_task()
 
@@ -41,9 +52,3 @@ class Script:
 
                 # Send results to the artist for display or storage
                 self.artist.add_results(i, task_results)
-
-                # Generate a set of suitable memories based off of the task and the task results
-                memory_set, memory_labels = strategy.select_memories(task, task_results, self.parameters.num_memories)
-
-                # Update the dataset with the new memories
-                dataset.update_training_set(memory_set, memory_labels)

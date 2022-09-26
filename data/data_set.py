@@ -4,9 +4,11 @@ import numpy as np
 
 class DataSet(ABC):
 
-    @abstractmethod
+    def __init__(self, num_tasks: int):
+        self.num_tasks = num_tasks
+
     def get_num_tasks(self) -> int:
-        pass
+        return self.num_tasks
 
     @abstractmethod
     def update_training_set(self, selected_memory_data, selected_memory_labels):
@@ -15,39 +17,12 @@ class DataSet(ABC):
         pass
 
     @abstractmethod
-    def get_tasks(self):
-        """Returns the full set of all non-validation data-label tuples as a two dimensional array sorted by task."""
+    def get_task(self):
         pass
 
     @abstractmethod
-    def get_training_set(self):
-        """Returns the set of currently selected data objects that are either in the currently training task or were
-        selected by the selection policy"""
+    def reset(self):
         pass
-
-    @abstractmethod
-    def get_training_labels(self):
-        """Returns the set of currently selected data labels that are either in the currently training task or were
-        selected by the selection policy"""
-        pass
-
-    @abstractmethod
-    def get_validation_set(self):
-        """Returns the set of validation data objects that are used to ensure that the model isn't over-fitting"""
-        pass
-
-    @abstractmethod
-    def get_validation_labels(self):
-        """Returns the set of validation data labels that are used to ensure that the model isn't over-fitting"""
-        pass
-
-    @abstractmethod
-    def get_task_validation_set(self, task_number):
-        return self.test_tasks[task_number][0]
-
-    @abstractmethod
-    def get_task_validation_labels(self, task_number):
-        return self.test_tasks[task_number][1]
 
 
 def build_tasks(training_images, training_labels, num_tasks: int, num_labels_per_task: int) \
@@ -79,4 +54,3 @@ def shuffle_data(data, label):
     randomised_label = label[indexes]
 
     return randomised_data, randomised_label
-

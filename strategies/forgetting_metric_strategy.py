@@ -60,8 +60,12 @@ class ForgettingSelectionStrategy(SelectionStrategy):
                 forgetness[index] = epochs
             else:
                 forgetness[index] = 0
-                
+        
+        # (1) Choose the examples with the highest forgetting statistics
         forgetness = dict(sorted(forgetness.items(), key = lambda item: item[1], reverse = True))
+        
+        # (2) Choose the examples with the lowest forgetting statistics
+        # forgetness = dict(sorted(forgetness.items(), key = lambda item: item[1]))
         
         old_data_subset = []
         old_label_subset = []

@@ -72,3 +72,27 @@ be placed into the artist's Draw() method.
 If you wish to do something else with the output data then you can create a new Artist class. All Artists must extend 
 the abstract [Artist](art/artist.py) class and implement the draw() and add_results() methods.
 
+### Strategies
+
+Currently available options:
+- [NoSelectionStrategy](strategies/no_selection_strategy.py)
+- [RandomSelectionStrategy](strategies/random_selection_strategy.py)
+
+Coming soon!
+- [ForgettingMetricStrategy](strategies/forgetting_metric_strategy.py)
+- [NovelSelectionStrategy](strategies/novel_selection_strategy.py)
+
+Strategies define the method used to select which memories should be kept in order to utilise replay to reduce 
+catastrophic forgetting. NoSelectionStrategy simply returns no memories and RandomSelectionStrategy returns a random
+selection. These are simply for use in comparison with our other strategies.
+
+Scripts take a list of strategies to test with but run each strategy separately and disconnected from the others. If 
+you wish to test a mixture of strategies working in tandem then you will need to implement a new strategy class that 
+implements that.
+
+If you wish to create a new Strategy then you can make a new Strategy class. All Strategy classes must extend the 
+abstract [SelectionStrategy](strategies/selection_strategy.py) class and implement the select_memories() methods.
+
+### Datasets
+
+### Script Parameters

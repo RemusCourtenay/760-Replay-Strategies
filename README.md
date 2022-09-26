@@ -35,3 +35,27 @@ In this example the script will run four different tests with both strategies at
 use the default neural network and artist and run the tests with 1000 memories per task and 10 epochs 
 (as defined by the script parameters).
 
+Further explanation of each parameter will be discussed below:
+
+### Neural Network
+
+Currently available options:
+- DefaultNeuralNetwork()
+
+The default class is a 6 layer CNN with two convolutional layers, a pooling layer, a flattening layer, and two dense layers. 
+It uses the 'adam optimizer', calculates predictions as well as the history, and saves log data to the logs file.
+It takes the following optional arguments:
+- num_filters_1 = 4 : The number of filters in the initial convolutional layer
+- kernel_size_1 = (5, 5) : The shape of the kernel in the first convolutional layer
+- input_shape = (28, 28, 1) : The shape of the inputs (generally images)
+- max_pooling_shape = (2, 2) : The shape of the MaxPooling2D layer
+- num_filters_2 = 8 : The number of filters in the second convolutional layer
+- kernel_size_2 = (3, 3) : The shape of the kernel in the second convolutional layer
+- activation_type = 'relu' : The activation type for the two convolutional layers and first dense layer
+- dense_layer_size = 10 : The size of the last two dense layers
+
+### Artist
+
+Currently available options:
+- DefaultArtist()
+- PlottingArtist()

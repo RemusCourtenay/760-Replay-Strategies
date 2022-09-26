@@ -40,7 +40,7 @@ Further explanation of each parameter will be discussed below:
 ### Neural Network
 
 Currently available options:
-- DefaultNeuralNetwork()
+- [DefaultNeuralNetwork](models/default_neural_network.py)
 
 The default class is a 6 layer CNN with two convolutional layers, a pooling layer, a flattening layer, and two dense layers. 
 It uses the 'adam optimizer', calculates predictions as well as the history, and saves log data to the logs file.
@@ -54,8 +54,21 @@ It takes the following optional arguments:
 - activation_type = 'relu' : The activation type for the two convolutional layers and first dense layer
 - dense_layer_size = 10 : The size of the last two dense layers
 
+If you wish to use a different model then you can creat a new NeuralNetwork class. All NeuralNetworks must extend the 
+abstract [NeuralNetwork](models/neural_network.py) class and implement the reset() and train_task().
+
 ### Artist
 
 Currently available options:
-- DefaultArtist()
-- PlottingArtist()
+- [DefaultArtist](art/default_artist.py)
+- [PlottingArtist](art/plotting_artist.py)
+
+The default artist currently is a stub and doesn't implement and plotting in the draw method. This is because plot 
+creation for large runs is currently being handled by the tensorboard library.
+
+The plotting artist can be used to create specific plots not covered by tensorboard, to do this plotting code must 
+be placed into the artist's Draw() method.
+
+If you wish to do something else with the output data then you can create a new Artist class. All Artists must extend 
+the abstract [Artist](art/artist.py) class and implement the draw() and add_results() methods.
+

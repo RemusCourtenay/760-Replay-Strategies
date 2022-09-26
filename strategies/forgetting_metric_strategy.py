@@ -4,7 +4,8 @@ import numpy as np
 import tensorflow as tf
 from art.artist import Artist
 from data.mnist_data_set import MnistDataSet as DataSet
-from data.task import Task, TaskResult
+from data.task import Task
+from data.task_result import TaskResult
 from models.simple_cnn import SimpleCNN as NeuralNetwork
 from strategies.selection_strategy import SelectionStrategy
 
@@ -20,6 +21,9 @@ class ForgettingSelectionStrategy(SelectionStrategy):
 
         old_training_data = task.training_set
         old_training_labels = task.training_labels
+
+        # Predictions is a list of prediction arrays ordered by epoch.
+        predictions = task_result.get_predictions()
 
 
 

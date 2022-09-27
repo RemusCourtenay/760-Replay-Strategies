@@ -95,4 +95,10 @@ abstract [SelectionStrategy](strategies/selection_strategy.py) class and impleme
 
 ### Datasets
 
+Currently available options:
+- [MnistDataSet](data/mnist_data_set.py)
+- [FashionDataSet](data/fashion_data_set.py)
+
+Datasets collect and store
+
 ### Script Parameters

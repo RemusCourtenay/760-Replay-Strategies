@@ -11,7 +11,7 @@ class ForgettingNeuralNetwork(NeuralNetwork):
 
     def __init__(self):
         super().__init__(tf.keras.Sequential)
-        self.model.add(tf.keras.layers......)
+        # self.model.add(tf.keras.layers......)
         # TODO...
 
 

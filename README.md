@@ -77,14 +77,18 @@ the abstract [Artist](art/artist.py) class and implement the draw() and add_resu
 Currently available options:
 - [NoSelectionStrategy](strategies/no_selection_strategy.py)
 - [RandomSelectionStrategy](strategies/random_selection_strategy.py)
-
-Coming soon!
 - [ForgettingMetricStrategy](strategies/forgetting_selection_strategy.py)
+
+Coming Soon!
 - [NovelSelectionStrategy](strategies/novel_selection_strategy.py)
 
 Strategies define the method used to select which memories should be kept in order to utilise replay to reduce 
 catastrophic forgetting. NoSelectionStrategy simply returns no memories and RandomSelectionStrategy returns a random
 selection. These are simply for use in comparison with our other strategies.
+
+ForgettingNeuralSelection requires it's own [ForgettingNeuralNetwork](models/forgetting_neural_network.py) to be passed
+in when first instantiated. If you wish to have it use a different NN for it's internal "forgetness" calculations then
+that NN must output prediction values in it's [TaskResult](data/task_result.py).
 
 Scripts take a list of strategies to test with but run each strategy separately and disconnected from the others. If 
 you wish to test a mixture of strategies working in tandem then you will need to implement a new strategy class that 
@@ -99,6 +103,9 @@ Currently available options:
 - [MnistDataSet](data/mnist_data_set.py)
 - [FashionDataSet](data/fashion_data_set.py)
 
-Datasets collect and store
+Datasets store data and handle the creation of [Task](data/task.py) objects. Currently all data must be of the shape
+(28, 28, 1) as this is hardcoded in some areas. 
 
 ### Script Parameters
+
+The 

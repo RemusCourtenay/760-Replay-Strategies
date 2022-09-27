@@ -1,6 +1,7 @@
 from data.fashion_data_set import FashionDataSet
 from data.mnist_data_set import MnistDataSet
 from models.default_neural_network import DefaultNeuralNetwork
+from models.forgetting_neural_network import ForgettingNeuralNetwork
 from scripts.script import Script
 from scripts.script_parameters import ScriptParameters
 from strategies.forgetting_selection_strategy import ForgettingSelectionStrategy
@@ -11,7 +12,7 @@ from art.default_artist import DefaultArtist
 if __name__ == "__main__":
     script = Script(DefaultNeuralNetwork(),
                     DefaultArtist(),
-                    [ForgettingSelectionStrategy(DefaultNeuralNetwork()), RandomSelectionStrategy(), NoSelectionStrategy()],
+                    [ForgettingSelectionStrategy(ForgettingNeuralNetwork()), RandomSelectionStrategy(), NoSelectionStrategy()],
                     [FashionDataSet(), MnistDataSet()],
                     ScriptParameters(1000, 10))  # TODO... put real numbers here
 

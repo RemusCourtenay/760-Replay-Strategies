@@ -108,4 +108,14 @@ Datasets store data and handle the creation of [Task](data/task.py) objects. Cur
 
 ### Script Parameters
 
-The 
+The [Script Parameter](scripts/script_parameters.py) object defines the value for the hyper-parameters used in the 
+tests.
+
+Currently available parameters are:
+- Number of memories per task 
+- Number of epochs per task
+
+Note that changing the number of epochs will not change the number of epochs used by the 
+[ForgettingNeuralNetwork](models/forgetting_neural_network.py).
+
+

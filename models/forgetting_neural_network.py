@@ -6,7 +6,6 @@ import tensorflow as tf
 
 
 class ForgettingNeuralNetwork(NeuralNetwork):
-
     INPUT_SHAPE = (28, 28, 1)
 
     def __init__(self):
@@ -18,14 +17,16 @@ class ForgettingNeuralNetwork(NeuralNetwork):
         self.model.add(tf.keras.layers.Dense(10, activation='relu'))
         self.model.add(tf.keras.layers.Dense(10))
 
+        self.model.compile(optimizer=self.DEFAULT_OPTIMIZER,
+                           loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                           metrics=[self.ACCURACY_METRIC_TAG])
 
         self.probability_model = tf.keras.Sequential([self.model, tf.keras.layers.Softmax()])
 
     def reset(self):
         return ForgettingNeuralNetwork()
 
-    def train_task(self, task: Task, epochs = 10) -> TaskResult:
-
+    def train_task(self, task: Task, epochs=10) -> TaskResult:
         prediction_list = []
         history = None
 

@@ -77,7 +77,7 @@ the abstract [Artist](art/artist.py) class and implement the draw() and add_resu
 Currently available options:
 - [NoSelectionStrategy](strategies/no_selection_strategy.py)
 - [RandomSelectionStrategy](strategies/random_selection_strategy.py)
-- [ForgettingMetricStrategy](strategies/forgetting_selection_strategy.py)
+- [ForgettingMetricStrategy](strategies/forgetting/forgetting_selection_strategy.py)
 
 Coming Soon!
 - [NovelSelectionStrategy](strategies/novel_selection_strategy.py)

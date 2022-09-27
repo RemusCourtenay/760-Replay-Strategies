@@ -6,6 +6,9 @@ from data.task_result import TaskResult
 
 class NeuralNetwork(ABC):
 
+    DEFAULT_OPTIMIZER = 'adam'
+    ACCURACY_METRIC_TAG = 'accuracy'
+
     def __init__(self, model):
         self.model = model
 

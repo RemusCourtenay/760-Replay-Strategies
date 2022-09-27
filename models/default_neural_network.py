@@ -9,8 +9,6 @@ import numpy as np
 
 
 class DefaultNeuralNetwork(NeuralNetwork):
-    DEFAULT_OPTIMIZER = 'adam'
-    ACCURACY_METRIC_TAG = 'accuracy'
 
     def __init__(self,
                  num_filters_1=4, kernel_size_1=(5, 5), input_shape=(28, 28, 1),
@@ -31,7 +29,6 @@ class DefaultNeuralNetwork(NeuralNetwork):
         self.model.compile(optimizer=self.DEFAULT_OPTIMIZER,
                            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                            metrics=[self.ACCURACY_METRIC_TAG])
-        self.probability_model = tf.keras.Sequential([self.model, tf.keras.layers.Softmax()])
 
         log_dir = "logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
         self.tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir)
@@ -46,10 +43,5 @@ class DefaultNeuralNetwork(NeuralNetwork):
                                  epochs=epochs,
                                  validation_data=(task.validation_set, task.validation_labels),
                                  callbacks=[self.tensorboard_callback])
-
-        predictions = []
-        for i in range(epochs):
-            predictions.append(self.probability_model.predict(task.training_set, verbose=2))
-
         # return TaskResults
-        return TaskResult(history, predictions)
+        return TaskResult(history)

@@ -6,7 +6,7 @@ import numpy.typing as npt
 
 class TaskResult:
 
-    def __init__(self, task_history: History, predictions: List[npt.ArrayLike]):
+    def __init__(self, task_history: History, predictions=None):
         self.strategy_name = ""
         self.task_history = task_history
         self.predictions = predictions

@@ -1,26 +1,20 @@
-from typing import Tuple, List
+from abc import ABC, abstractmethod
+from typing import Tuple, List, Dict
 
 import numpy as np
-import tensorflow as tf
-from art.artist import Artist
-from data.mnist_data_set import MnistDataSet as DataSet
+
 from data.task import Task
 from data.task_result import TaskResult
 from models.forgetting_neural_network import ForgettingNeuralNetwork
-from models.simple_cnn import SimpleCNN as NeuralNetwork
 from strategies.selection_strategy import SelectionStrategy
 
 
-class ForgettingSelectionStrategy(SelectionStrategy):
-    STRATEGY_NAME = "Forgetting Selection Strategy"
-
-    # def __init__(self):
-    #     super().__init__(self.STRATEGY_NAME)
+class ForgettingSelectionStrategy(SelectionStrategy, ABC):
 
     # Forgetting statistics is obtained through another NN, NN must be either a ForgettingNeuralNetwork or an
     # implementation of ForgettingNeuralNetwork in order to gain access to prediction data
-    def __init__(self, model: ForgettingNeuralNetwork):
-        super().__init__(self.STRATEGY_NAME)
+    def __init__(self, model: ForgettingNeuralNetwork, strategy_name: str):
+        super().__init__(strategy_name)
         self.model = model
 
     def select_memories(self, task: Task, task_result: TaskResult, num_memories: int) -> Tuple[List, List]:
@@ -56,7 +50,7 @@ class ForgettingSelectionStrategy(SelectionStrategy):
                 forgetness[index] = 0
 
         # (1) Choose the examples with the highest forgetting statistics
-        forgetness = dict(sorted(forgetness.items(), key=lambda item: item[1], reverse=True))
+        forgetness = self.sort_forgetness(forgetness)
 
         selected_memories = []
         selected_memory_labels = []
@@ -66,3 +60,7 @@ class ForgettingSelectionStrategy(SelectionStrategy):
                 selected_memory_labels.append(old_training_labels[i])
 
         return selected_memories, selected_memory_labels
+
+    @abstractmethod
+    def sort_forgetness(self, forgetness: Dict) -> Dict:
+        pass

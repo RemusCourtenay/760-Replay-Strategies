@@ -79,7 +79,7 @@ Currently available options:
 - [RandomSelectionStrategy](strategies/random_selection_strategy.py)
 
 Coming soon!
-- [ForgettingMetricStrategy](strategies/forgetting_metric_strategy.py)
+- [ForgettingMetricStrategy](strategies/forgetting_selection_strategy.py)
 - [NovelSelectionStrategy](strategies/novel_selection_strategy.py)
 
 Strategies define the method used to select which memories should be kept in order to utilise replay to reduce 

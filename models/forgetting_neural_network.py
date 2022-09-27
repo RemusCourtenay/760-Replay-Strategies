@@ -10,7 +10,7 @@ class ForgettingNeuralNetwork(NeuralNetwork):
     INPUT_SHAPE = (28, 28, 1)
 
     def __init__(self):
-        super().__init__(tf.keras.Sequential)
+        super().__init__(tf.keras.Sequential())
         self.model.add(tf.keras.layers.Conv2D(4, (5, 5), activation='relu', input_shape=(28, 28, 1)))
         self.model.add(tf.keras.layers.MaxPooling2D((2, 2)))
         self.model.add(tf.keras.layers.Conv2D(8, (3, 3), activation='relu'))

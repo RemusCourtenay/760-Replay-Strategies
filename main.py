@@ -11,13 +11,16 @@ from strategies.no_selection_strategy import NoSelectionStrategy
 from art.default_artist import DefaultArtist
 
 if __name__ == "__main__":
-    script = Script(DefaultNeuralNetwork(),
+    # TODO... put real numbers here
+    parameters = ScriptParameters(1000, 5)
+
+    script = Script(DefaultNeuralNetwork(parameters),
                     DefaultArtist(),
-                    [LeastForgettingSelectionStrategy(ForgettingNeuralNetwork()),
-                     MostForgettingSelectionStrategy(ForgettingNeuralNetwork()),
+                    [LeastForgettingSelectionStrategy(ForgettingNeuralNetwork(parameters)),
+                     MostForgettingSelectionStrategy(ForgettingNeuralNetwork(parameters)),
                      RandomSelectionStrategy(),
                      NoSelectionStrategy()],
                     [FashionDataSet(), MnistDataSet()],
-                    ScriptParameters(1000, 5))  # TODO... put real numbers here
+                    ScriptParameters(1000, 5))
 
     script.run()

@@ -1,6 +1,7 @@
 from typing import Dict
 
 from models.forgetting_neural_network import ForgettingNeuralNetwork
+from scripts.script_parameters import ScriptParameters
 from strategies.forgetting.forgetting_selection_strategy import ForgettingSelectionStrategy
 
 

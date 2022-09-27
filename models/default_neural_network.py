@@ -7,34 +7,32 @@ from models.neural_network import NeuralNetwork
 import tensorflow as tf
 import numpy as np
 
+from scripts.script_parameters import ScriptParameters
+
 
 class DefaultNeuralNetwork(NeuralNetwork):
 
-    def __init__(self,
-                 num_filters_1=4, kernel_size_1=(5, 5), input_shape=(28, 28, 1),
-                 max_pooling_shape=(2, 2),
-                 num_filters_2=8, kernel_size_2=(3, 3),
-                 activation_type='relu',
-                 dense_layer_size=10):
-        super().__init__(tf.keras.models.Sequential())
-        self.model.add(tf.keras.layers.Conv2D(num_filters_1, kernel_size_1, activation=activation_type,
-                                              input_shape=input_shape))
-        self.model.add(tf.keras.layers.MaxPooling2D(max_pooling_shape))
-        self.model.add(tf.keras.layers.Conv2D(num_filters_2, kernel_size_2, activation=activation_type))
-        self.model.add(tf.keras.layers.Flatten())
-        self.model.add(tf.keras.layers.Dense(dense_layer_size, activation=activation_type))
-        self.model.add(tf.keras.layers.Dense(dense_layer_size))
-
-        # define optimizer and loss function to use
-        self.model.compile(optimizer=self.DEFAULT_OPTIMIZER,
-                           loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-                           metrics=[self.ACCURACY_METRIC_TAG])
+    def __init__(self, params: ScriptParameters):
+        super().__init__(tf.keras.models.Sequential(), params)
 
         log_dir = "logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
         self.tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir)
 
+    def setup_layers(self) -> None:
+        self.model.add(tf.keras.layers.Conv2D(self.params.num_filters_1,
+                                              self.params.kernel_size_1,
+                                              activation=self.params.activation_type,
+                                              input_shape=self.params.input_shape))
+        self.model.add(tf.keras.layers.MaxPooling2D(self.params.max_pooling_shape))
+        self.model.add(tf.keras.layers.Conv2D(self.params.num_filters_2,
+                                              self.params.kernel_size_2,
+                                              activation=self.params.activation_type))
+        self.model.add(tf.keras.layers.Flatten())
+        self.model.add(tf.keras.layers.Dense(self.params.dense_layer_size, activation=self.params.activation_type))
+        self.model.add(tf.keras.layers.Dense(self.params.dense_layer_size))
+
     def reset(self) -> NeuralNetwork:
-        return DefaultNeuralNetwork()
+        return DefaultNeuralNetwork(self.params)
 
     # function to train model on specified task
     def train_task(self, task: Task, epochs) -> TaskResult:

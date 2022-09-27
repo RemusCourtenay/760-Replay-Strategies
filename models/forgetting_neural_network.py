@@ -11,8 +11,12 @@ class ForgettingNeuralNetwork(NeuralNetwork):
 
     def __init__(self):
         super().__init__(tf.keras.Sequential)
-        # self.model.add(tf.keras.layers......)
-        # TODO...
+        self.model.add(tf.keras.layers.Conv2D(4, (5, 5), activation='relu', input_shape=(28, 28, 1)))
+        self.model.add(tf.keras.layers.MaxPooling2D((2, 2)))
+        self.model.add(tf.keras.layers.Conv2D(8, (3, 3), activation='relu'))
+        self.model.add(tf.keras.layers.Flatten())
+        self.model.add(tf.keras.layers.Dense(10, activation='relu'))
+        self.model.add(tf.keras.layers.Dense(10))
 
 
         self.probability_model = tf.keras.Sequential([self.model, tf.keras.layers.Softmax()])

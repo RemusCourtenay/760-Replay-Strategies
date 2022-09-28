@@ -61,6 +61,7 @@ class DataSet(ABC):
         current_training_data, current_training_labels = shuffle_labelled_data(new_training_data, new_training_labels)
         current_validation_data, current_validation_labels = self.get_validation_data_tuple(task_index)
 
+
         self.current_task = Task(task_index, self.name,
                                  current_training_data, current_training_labels,
                                  current_validation_data, current_validation_labels)
@@ -89,6 +90,11 @@ class DataSet(ABC):
         for i in range(self.num_tasks):
             task_labels.append(
                 labels[i * self.num_labels_per_task:((i * self.num_labels_per_task) + self.num_labels_per_task)])
+
+        # merge last two tasks if last task is smaller
+        if len(task_labels[-1]) < len(task_labels[-2]):
+            last_tasks = task_labels.pop(-1)
+            task_labels[-2] = np.concatenate((task_labels[-1], last_tasks))
 
         for image, label in zip(training_images, training_labels):
             # find out which task the data should belong to by checking with all the task_labels

@@ -18,7 +18,7 @@ if __name__ == "__main__":
     MNIST_DATA_SIZE = 60000
     MNIST_LABELS = 10
     REPLAY_MEMORY_PERCENT = 0.1
-    NUM_LABELS_PER_TASK = 2
+    NUM_LABELS_PER_TASK = 5
 
     num_task = math.floor(MNIST_LABELS / NUM_LABELS_PER_TASK)
     replay_mem = int((MNIST_DATA_SIZE / num_task) * REPLAY_MEMORY_PERCENT)

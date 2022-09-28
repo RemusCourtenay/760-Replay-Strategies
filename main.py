@@ -12,12 +12,14 @@ from art.default_artist import DefaultArtist
 
 if __name__ == "__main__":
     # TODO... put real numbers here
-    parameters = ScriptParameters(1000, 10)
+    parameters = ScriptParameters(2000, 20)
 
     script = Script(DefaultNeuralNetwork(parameters),
                     DefaultArtist(),
-                    [NoSelectionStrategy(), RandomSelectionStrategy()],
-                    [MnistDataSet(), FashionDataSet()],
+                    [NoSelectionStrategy(), RandomSelectionStrategy(),
+                     LeastForgettingSelectionStrategy(ForgettingNeuralNetwork(parameters)),
+                     MostForgettingSelectionStrategy(ForgettingNeuralNetwork(parameters))],
+                    [MnistDataSet()],
                     parameters)
 
     script.run()

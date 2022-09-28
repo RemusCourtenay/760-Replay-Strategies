@@ -12,11 +12,14 @@ from scripts.script_parameters import ScriptParameters
 
 class DefaultNeuralNetwork(NeuralNetwork):
 
-    def __init__(self, params: ScriptParameters):
+    def __init__(self, params: ScriptParameters, time=None):
         super().__init__(tf.keras.models.Sequential(), params)
 
         self.log_dir = "logs/default/"
-        self.time = datetime.now().strftime("%Y%m%d-%H%M%S")
+        if time is None:
+            self.time = datetime.now().strftime("%Y%m%d-%H%M%S")
+        else:
+            self.time = time
         self.tensorboard_callback = None
 
     def setup_layers(self) -> None:
@@ -33,7 +36,7 @@ class DefaultNeuralNetwork(NeuralNetwork):
         self.model.add(tf.keras.layers.Dense(self.params.dense_layer_size))
 
     def reset(self) -> NeuralNetwork:
-        return DefaultNeuralNetwork(self.params)
+        return DefaultNeuralNetwork(self.params, self.time)
 
     # function to train model on specified task
     def train_task(self, task: Task, epochs) -> TaskResult:

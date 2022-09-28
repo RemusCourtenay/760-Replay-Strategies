@@ -61,7 +61,6 @@ class DataSet(ABC):
         current_training_data, current_training_labels = shuffle_labelled_data(new_training_data, new_training_labels)
         current_validation_data, current_validation_labels = self.get_validation_data_tuple(task_index)
 
-
         self.current_task = Task(task_index, self.name,
                                  current_training_data, current_training_labels,
                                  current_validation_data, current_validation_labels)

@@ -39,13 +39,17 @@ class DefaultNeuralNetwork(NeuralNetwork):
     def train_task(self, task: Task, epochs) -> TaskResult:
         current_log_dir = self.log_dir + "/" \
                           + str(task.dataset_name) + "/" \
-                          + str(task.strategy_name) + "/" \
-                          + self.time
+                          + str(task.strategy_name) + "/"
         # + str(task.task_num) + "/" \
         # + self.time
 
+        single_task_log_dir = current_log_dir + "/" + str(task.task_num) + "/" + self.time
+        current_log_dir = current_log_dir + "/" + self.time
+
         if self.tensorboard_callback is None:
             self.tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=current_log_dir, histogram_freq=1)
+
+        single_task_tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=single_task_log_dir, histogram_freq=1)
 
         initial_epoch = epochs * task.task_num
 
@@ -54,6 +58,6 @@ class DefaultNeuralNetwork(NeuralNetwork):
                                  epochs=initial_epoch + epochs,
                                  initial_epoch=initial_epoch,
                                  validation_data=(task.validation_set, task.validation_labels),
-                                 callbacks=[self.tensorboard_callback])
+                                 callbacks=[self.tensorboard_callback, single_task_tensorboard_callback])
         # return TaskResults
         return TaskResult(history)

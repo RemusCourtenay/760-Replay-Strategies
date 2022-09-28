@@ -47,7 +47,7 @@ class Script:
 
             # Reset model to initial state
             self.model = self.model.reset()
-            dataset = dataset.reset()
+            dataset.reset()
 
             for i in range(dataset.get_num_tasks()):
                 start_task = datetime.now()

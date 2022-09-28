@@ -52,7 +52,7 @@ class DefaultNeuralNetwork(NeuralNetwork):
         if self.tensorboard_callback is None:
             self.tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=current_log_dir, histogram_freq=1)
 
-        single_task_tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=single_task_log_dir, histogram_freq=1)
+        # single_task_tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=single_task_log_dir, histogram_freq=1)
 
         initial_epoch = epochs * task.task_num
 
@@ -61,6 +61,6 @@ class DefaultNeuralNetwork(NeuralNetwork):
                                  epochs=initial_epoch + epochs,
                                  initial_epoch=initial_epoch,
                                  validation_data=(task.validation_set, task.validation_labels),
-                                 callbacks=[self.tensorboard_callback, single_task_tensorboard_callback])
+                                 callbacks=[self.tensorboard_callback])
         # return TaskResults
         return TaskResult(history)

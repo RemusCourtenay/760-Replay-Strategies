@@ -53,8 +53,8 @@ class DataSet(ABC):
             current_validation_data = []
             current_validation_labels = []
             for task in self.validation_tasks:
-                current_validation_data.append(task[0])
-                current_validation_labels.append(task[1])
+                current_validation_data = current_validation_data + task[0]
+                current_validation_labels = current_validation_labels + task[1]
 
         self.current_task = Task(task_index, self.name,
                                  current_training_data, current_training_labels,

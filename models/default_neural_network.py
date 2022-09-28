@@ -15,8 +15,9 @@ class DefaultNeuralNetwork(NeuralNetwork):
     def __init__(self, params: ScriptParameters):
         super().__init__(tf.keras.models.Sequential(), params)
 
-        log_dir = "logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
-        self.tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir)
+        self.log_dir = "logs/default/"
+        self.time = datetime.now().strftime("%Y%m%d-%H%M%S")
+        self.tensorboard_callback = None
 
     def setup_layers(self) -> None:
         self.model.add(tf.keras.layers.Conv2D(self.params.num_filters_1,
@@ -36,9 +37,22 @@ class DefaultNeuralNetwork(NeuralNetwork):
 
     # function to train model on specified task
     def train_task(self, task: Task, epochs) -> TaskResult:
+        current_log_dir = self.log_dir + "/" \
+                          + str(task.dataset_name) + "/" \
+                          + str(task.strategy_name) + "/" \
+                          + self.time
+        # + str(task.task_num) + "/" \
+        # + self.time
+
+        if self.tensorboard_callback is None:
+            self.tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=current_log_dir, histogram_freq=1)
+
+        initial_epoch = epochs * task.task_num
+
         history = self.model.fit(task.training_set,
                                  task.training_labels,
-                                 epochs=epochs,
+                                 epochs=initial_epoch + epochs,
+                                 initial_epoch=initial_epoch,
                                  validation_data=(task.validation_set, task.validation_labels),
                                  callbacks=[self.tensorboard_callback])
         # return TaskResults

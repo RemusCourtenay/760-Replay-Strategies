@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from data.data_set import DataSet
 from models.neural_network import NeuralNetwork
 from art.artist import Artist
@@ -23,17 +25,21 @@ class Script:
 
     def run(self):
         for dataset in self.datasets:
+            start = datetime.now()
             self.run_dataset(dataset)
+            print("Finished dataset " + dataset.name + " in " + str(datetime.now() - start))
         self.artist.draw()
 
     def run_dataset(self, dataset: DataSet):
         for strategy in self.strategies:
+            start = datetime.now()
 
             # Reset model to initial state
             self.model = self.model.reset()
             dataset = dataset.reset()
 
             for i in range(dataset.get_num_tasks()):
+                start_task = datetime.now()
 
                 if i > 0:
                     # Generate a set of suitable memories based off of the task and the task results
@@ -45,7 +51,7 @@ class Script:
                     dataset.update_training_set(memory_set, memory_labels)
 
                 # Get the currently active task to be learned
-                task = dataset.get_task()
+                task = dataset.get_task(strategy.strategy_name)
 
                 # Train the model on the task
                 task_results = self.model.train_task(task, self.parameters.epochs)
@@ -53,3 +59,8 @@ class Script:
 
                 # Send results to the artist for display/storage
                 self.artist.add_results(task_results)
+
+                print("Finished task " + str(i) + " in " + str(datetime.now() - start_task))
+
+            print("Finished strategy " + strategy.strategy_name + " on current dataset in " + str(
+                datetime.now() - start))

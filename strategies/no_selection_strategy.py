@@ -6,7 +6,7 @@ from strategies.selection_strategy import SelectionStrategy
 
 
 class NoSelectionStrategy(SelectionStrategy):
-    STRATEGY_NAME = "No Selection Strategy"
+    STRATEGY_NAME = "none"
 
     def __init__(self, strategy_name: str = STRATEGY_NAME):
         super().__init__(strategy_name)

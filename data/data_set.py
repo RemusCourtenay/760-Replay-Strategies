@@ -10,7 +10,8 @@ from data.task import Task
 
 class DataSet(ABC):
 
-    def __init__(self, data, num_labels: int, num_labels_per_task: int, labelled_validation: bool):
+    def __init__(self, name, data, num_labels: int, num_labels_per_task: int, labelled_validation: bool):
+        self.name = name
         self.labelled_validation = labelled_validation
 
         # Calculate number of tasks based off of total label number and labels per task
@@ -24,7 +25,7 @@ class DataSet(ABC):
         self.current_task = self.build_initial_task()
 
     def build_initial_task(self) -> Task:
-        return Task(0,
+        return Task(0, self.name,
                     self.train_tasks[0][0], self.train_tasks[0][1],
                     self.validation_tasks[0][0], self.validation_tasks[0][1])
 
@@ -49,15 +50,18 @@ class DataSet(ABC):
             current_validation_data = self.validation_tasks[task_index][0]
             current_validation_labels = self.validation_tasks[task_index][1]
         else:
-            # There's probably a much faster way to do this
-            current_validation_data = self.validation_tasks[:][0]
-            current_validation_labels = self.validation_tasks[:][1]
+            current_validation_data = []
+            current_validation_labels = []
+            for task in self.validation_tasks:
+                current_validation_data.append(task[0])
+                current_validation_labels.append(task[1])
 
-        self.current_task = Task(task_index,
+        self.current_task = Task(task_index, self.name,
                                  current_training_data, current_training_labels,
                                  current_validation_data, current_validation_labels)
 
-    def get_task(self):
+    def get_task(self, strategy_name: str):
+        self.current_task.set_strategy_name(strategy_name)
         return self.current_task
 
     @abstractmethod

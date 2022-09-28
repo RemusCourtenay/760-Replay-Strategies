@@ -6,7 +6,7 @@ from strategies.forgetting.forgetting_selection_strategy import ForgettingSelect
 
 
 class LeastForgettingSelectionStrategy(ForgettingSelectionStrategy):
-    STRATEGY_NAME = "Least Forgetting Selection Strategy"
+    STRATEGY_NAME = "least-forgetting"
 
     def __init__(self, model: ForgettingNeuralNetwork):
         super().__init__(model, self.STRATEGY_NAME)

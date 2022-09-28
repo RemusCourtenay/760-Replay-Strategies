@@ -7,7 +7,7 @@ from strategies.selection_strategy import SelectionStrategy
 
 
 class RandomSelectionStrategy(SelectionStrategy):
-    STRATEGY_NAME = "Random Selection Strategy"
+    STRATEGY_NAME = "random"
 
     def __init__(self, strategy_name=STRATEGY_NAME):
         super().__init__(strategy_name)

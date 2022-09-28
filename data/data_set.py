@@ -25,9 +25,23 @@ class DataSet(ABC):
         self.current_task = self.build_initial_task()
 
     def build_initial_task(self) -> Task:
+        current_validation_data, current_validation_labels = self.get_validation_data_tuple(0)
         return Task(0, self.name,
                     self.train_tasks[0][0], self.train_tasks[0][1],
-                    self.validation_tasks[0][0], self.validation_tasks[0][1])
+                    current_validation_data, current_validation_labels)
+
+    def get_validation_data_tuple(self, task_index) -> Tuple[List, List]:
+        if self.labelled_validation:
+            current_validation_data = self.validation_tasks[task_index][0]
+            current_validation_labels = self.validation_tasks[task_index][1]
+        else:
+            current_validation_data = []
+            current_validation_labels = []
+            for task in self.validation_tasks:
+                current_validation_data = current_validation_data + task[0]
+                current_validation_labels = current_validation_labels + task[1]
+
+        return current_validation_data, current_validation_labels
 
     def get_num_tasks(self) -> int:
         return self.num_tasks
@@ -45,16 +59,7 @@ class DataSet(ABC):
             new_training_labels = np.concatenate((new_training_labels, selected_memory_labels), axis=0)
 
         current_training_data, current_training_labels = shuffle_labelled_data(new_training_data, new_training_labels)
-
-        if self.labelled_validation:
-            current_validation_data = self.validation_tasks[task_index][0]
-            current_validation_labels = self.validation_tasks[task_index][1]
-        else:
-            current_validation_data = []
-            current_validation_labels = []
-            for task in self.validation_tasks:
-                current_validation_data = current_validation_data + task[0]
-                current_validation_labels = current_validation_labels + task[1]
+        current_validation_data, current_validation_labels = self.get_validation_data_tuple(task_index)
 
         self.current_task = Task(task_index, self.name,
                                  current_training_data, current_training_labels,

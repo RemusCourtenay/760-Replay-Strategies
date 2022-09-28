@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     script = Script(DefaultNeuralNetwork(parameters),
                     DefaultArtist(),
-                    [RandomSelectionStrategy(), NoSelectionStrategy],
+                    [NoSelectionStrategy(), RandomSelectionStrategy()],
                     [MnistDataSet(), FashionDataSet()],
                     parameters)
 

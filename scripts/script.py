@@ -1,4 +1,5 @@
 from datetime import datetime
+from threading import Thread
 
 from data.data_set import DataSet
 from models.neural_network import NeuralNetwork
@@ -24,13 +25,23 @@ class Script:
         self.parameters = script_parameters
 
     def run(self):
+        # Doesn't work
+        # threads = []
+        # for dataset in self.datasets:
+        #     thread = Thread(target=self.run_dataset, args=[dataset])
+        #     thread.start()
+        #     threads.append(thread)
+        #
+        # for thread in threads:
+        #     thread.join()
+
         for dataset in self.datasets:
-            start = datetime.now()
             self.run_dataset(dataset)
-            print("Finished dataset " + dataset.name + " in " + str(datetime.now() - start))
+
         self.artist.draw()
 
     def run_dataset(self, dataset: DataSet):
+        start_dataset = datetime.now()
         for strategy in self.strategies:
             start = datetime.now()
 
@@ -64,3 +75,5 @@ class Script:
 
             print("Finished strategy " + strategy.strategy_name + " on current dataset in " + str(
                 datetime.now() - start))
+
+        print("Finished dataset " + dataset.name + " in " + str(datetime.now() - start_dataset))

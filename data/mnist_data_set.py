@@ -16,4 +16,4 @@ class MnistDataSet(DataSet):
                          labelled_validation)
 
     def reset(self):
-        return MnistDataSet()
+        self.current_task = self.build_initial_task()

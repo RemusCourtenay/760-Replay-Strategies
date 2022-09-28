@@ -93,8 +93,9 @@ class DataSet(ABC):
         # merge last two tasks if last task is smaller
         if len(task_labels[-1]) < len(task_labels[-2]):
             last_tasks = task_labels.pop(-1)
-            task_labels[-2] = np.concatenate((task_labels[-1], last_tasks))
-
+            task_labels[-1] = np.concatenate((task_labels[-1], last_tasks))
+            self.num_tasks -= 1
+            
         for image, label in zip(training_images, training_labels):
             # find out which task the data should belong to by checking with all the task_labels
 

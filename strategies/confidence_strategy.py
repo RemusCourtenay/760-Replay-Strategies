@@ -10,7 +10,7 @@ from models.confidence_neural_network import ConfidenceNeuralNetwork
 from strategies.selection_strategy import SelectionStrategy
 
 
-class ConfidenceStrategy(SelectionStrategy, ABC):
+class ConfidenceStrategy(SelectionStrategy):
     def __init__(self, model: ConfidenceNeuralNetwork):
         super().__init__('confidence')
         self.model = model
@@ -41,7 +41,7 @@ class ConfidenceStrategy(SelectionStrategy, ABC):
         # Use stat values to calculate forgetness
         forgetness = {}
         for index, lst in scores.items():
-            forgetness[i] = max(lst)-min(lst)
+            forgetness[index] = max(lst)-min(lst)
 
         # Choose the examples with the highest confidence difference
         forgetness = sorted(forgetness.items(), key=lambda x: x[1], reverse=True)
@@ -49,7 +49,7 @@ class ConfidenceStrategy(SelectionStrategy, ABC):
         selected_memories = []
         selected_memory_labels = []
         for i in range(len(forgetness)):
-            if len(selected_memories) <= num_memories:
+            if len(selected_memories) < num_memories:
                 selected_memories.append(old_training_data[i])
                 selected_memory_labels.append(old_training_labels[i])
 

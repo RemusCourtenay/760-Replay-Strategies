@@ -32,5 +32,5 @@ class NeuralNetwork(ABC):
         pass
 
     @abstractmethod
-    def train_task(self, task: Task, epochs) -> TaskResult:
+    def train_task(self, task: Task) -> TaskResult:
         pass

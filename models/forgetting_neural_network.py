@@ -10,8 +10,9 @@ from scripts.script_parameters import ScriptParameters
 class ForgettingNeuralNetwork(NeuralNetwork):
     INPUT_SHAPE = (28, 28, 1)
 
-    def __init__(self, params: ScriptParameters):
+    def __init__(self, params: ScriptParameters, epochs=10):
         super().__init__(tf.keras.Sequential(), params)
+        self.epochs = epochs
 
         self.probability_model = tf.keras.Sequential([self.model, tf.keras.layers.Softmax()])
 
@@ -26,11 +27,11 @@ class ForgettingNeuralNetwork(NeuralNetwork):
     def reset(self):
         return ForgettingNeuralNetwork(self.params)
 
-    def train_task(self, task: Task, epochs=10) -> TaskResult:
+    def train_task(self, task: Task) -> TaskResult:
         prediction_list = []
         history = None
 
-        for i in range(epochs):
+        for i in range(self.epochs):
             history = self.model.fit(task.training_set, task.training_labels)
             prediction_list.append(self.probability_model.predict(task.training_set))
 

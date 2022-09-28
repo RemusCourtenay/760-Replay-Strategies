@@ -55,7 +55,7 @@ class ForgettingSelectionStrategy(SelectionStrategy, ABC):
         selected_memories = []
         selected_memory_labels = []
         for i, _ in forgetness.items():
-            if len(selected_memories) <= num_memories:
+            if len(selected_memories) < num_memories:
                 selected_memories.append(old_training_data[i])
                 selected_memory_labels.append(old_training_labels[i])
 

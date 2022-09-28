@@ -44,7 +44,8 @@ class DataSet(ABC):
             new_training_data = np.concatenate((new_training_data, selected_memory_data), axis=0)
             new_training_labels = np.concatenate((new_training_labels, selected_memory_labels), axis=0)
 
-        current_training_data, current_training_labels = shuffle_labelled_data(new_training_data, new_training_labels)
+        # current_training_data, current_training_labels = shuffle_labelled_data(new_training_data, new_training_labels)
+        current_training_data, current_training_labels = new_training_data, new_training_labels
 
         if self.labelled_validation:
             current_validation_data = self.validation_tasks[task_index][0]
@@ -84,6 +85,11 @@ class DataSet(ABC):
         for i in range(self.num_tasks):
             task_labels.append(
                 labels[i * self.num_labels_per_task:((i * self.num_labels_per_task) + self.num_labels_per_task)])
+
+        # merge last two tasks if last task is smaller
+        if len(task_labels[-1]) < len(task_labels[-2]):
+            last_tasks = task_labels.pop(-1)
+            task_labels[-2] = np.concatenate((task_labels[-1], last_tasks))
 
         for image, label in zip(training_images, training_labels):
             # find out which task the data should belong to by checking with all the task_labels

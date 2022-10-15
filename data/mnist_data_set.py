@@ -8,11 +8,12 @@ class MnistDataSet(DataSet):
     NUM_LABELS = 10
     NAME = "numbers"
 
-    def __init__(self, num_labels_per_task=2, labelled_validation=False):
+    def __init__(self, num_labels_per_task=2, replay_size=0, labelled_validation=False):
         super().__init__(self.NAME,
                          tf.keras.datasets.mnist.load_data(),
                          self.NUM_LABELS,
                          num_labels_per_task,
+                         replay_size,
                          labelled_validation)
 
     def reset(self):

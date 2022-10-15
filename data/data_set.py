@@ -4,15 +4,19 @@ from typing import Tuple, List
 
 import numpy as np
 import numpy.typing as npt
+import random
 
 from data.task import Task
 
+# set as True if storing replay samples in buffer
+USE_BUFFER = True
 
 class DataSet(ABC):
 
-    def __init__(self, name, data, num_labels: int, num_labels_per_task: int, labelled_validation: bool):
+    def __init__(self, name, data, num_labels: int, num_labels_per_task: int, replay_size: int, labelled_validation: bool):
         self.name = name
         self.labelled_validation = labelled_validation
+        self.replay_size = replay_size
 
         # Calculate number of tasks based off of total label number and labels per task
         self.num_labels = num_labels
@@ -23,6 +27,9 @@ class DataSet(ABC):
         self.train_tasks = self.build_tasks(data[0])
         self.validation_tasks = self.build_tasks(data[1])
         self.current_task = self.build_initial_task()
+
+        self.buffer_data = []
+        self.buffer_labels = []
 
     def build_initial_task(self) -> Task:
         current_validation_data, current_validation_labels = self.get_validation_data_tuple(0)
@@ -55,8 +62,21 @@ class DataSet(ABC):
 
         # concatenate selected data if it is not empty
         if len(selected_memory_data) > 0:
-            new_training_data = np.concatenate((new_training_data, selected_memory_data), axis=0)
-            new_training_labels = np.concatenate((new_training_labels, selected_memory_labels), axis=0)
+            task_number = self.current_task.get_num()
+            if task_number == 0 or not USE_BUFFER:
+                self.buffer_data = selected_memory_data
+                self.buffer_labels = selected_memory_labels
+            else:
+                # if using buffer, replace a portion of the buffer with new replay samples
+                # probability is 1/(tasks seen)
+                for i in range(self.replay_size):
+                    index = random.randint(0, self.replay_size * (task_number+1))
+                    if index < self.replay_size:
+                        self.buffer_data[index] = selected_memory_data[index]
+                        self.buffer_labels[index] = selected_memory_labels[index]
+
+            new_training_data = np.concatenate((new_training_data, self.buffer_data), axis=0)
+            new_training_labels = np.concatenate((new_training_labels, self.buffer_labels), axis=0)
 
         current_training_data, current_training_labels = shuffle_labelled_data(new_training_data, new_training_labels)
         current_validation_data, current_validation_labels = self.get_validation_data_tuple(task_index)
@@ -85,6 +105,7 @@ class DataSet(ABC):
         # shuffle labels
         np.random.shuffle(labels)
         # store the labels in an array then split the shuffled labels into specified number of tasks
+        # task_labels = [np.array([0, 1]), np.array([2, 3]), np.array([4, 5]), np.array([6, 7]), np.array([8, 9])]
         task_labels = []
         for i in range(self.num_tasks):
             task_labels.append(

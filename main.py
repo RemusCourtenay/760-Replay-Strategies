@@ -18,7 +18,7 @@ if __name__ == "__main__":
     MNIST_DATA_SIZE = 60000
     MNIST_LABELS = 10
     REPLAY_MEMORY_PERCENT = 0.1
-    NUM_LABELS_PER_TASK = 5
+    NUM_LABELS_PER_TASK = 2
 
     num_task = math.floor(MNIST_LABELS / NUM_LABELS_PER_TASK)
     replay_mem = int((MNIST_DATA_SIZE / num_task) * REPLAY_MEMORY_PERCENT)
@@ -27,15 +27,17 @@ if __name__ == "__main__":
     epochs = 10
     prediction_epochs = 5
 
-    parameters = ScriptParameters(replay_mem, epochs)
+    parameters = ScriptParameters(replay_mem, epochs, save_to_csv=True)
 
-    script = Script(DefaultNeuralNetwork(parameters),
-                    DefaultArtist(),
-                    [NoSelectionStrategy(), RandomSelectionStrategy(),
-                     LeastForgettingSelectionStrategy(ForgettingNeuralNetwork(parameters, prediction_epochs)),
-                     MostForgettingSelectionStrategy(ForgettingNeuralNetwork(parameters, prediction_epochs)),
-                     ConfidenceStrategy(ConfidenceNeuralNetwork(parameters, prediction_epochs))],
-                    [MnistDataSet(num_labels_per_task=NUM_LABELS_PER_TASK)],
-                    parameters)
+    for i in range(2):
+        script = Script(DefaultNeuralNetwork(parameters),
+                        DefaultArtist(),
+                        [NoSelectionStrategy(),
+                        RandomSelectionStrategy(),
+                        LeastForgettingSelectionStrategy(ForgettingNeuralNetwork(parameters, prediction_epochs)),
+                        MostForgettingSelectionStrategy(ForgettingNeuralNetwork(parameters, prediction_epochs)),
+                        ConfidenceStrategy(ConfidenceNeuralNetwork(parameters, prediction_epochs))],
+                        [MnistDataSet(num_labels_per_task=NUM_LABELS_PER_TASK, replay_size=replay_mem)],
+                        parameters)
 
-    script.run()
+        script.run()

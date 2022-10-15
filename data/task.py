@@ -23,3 +23,8 @@ class Task:
     def set_strategy_name(self, strategy_name: str) -> None:
         self.strategy_name = strategy_name
 
+    def get_validation(self):
+        return self.validation_set, self.validation_labels
+
+    def get_num(self):
+        return self.task_num

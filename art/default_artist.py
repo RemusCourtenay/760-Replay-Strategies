@@ -3,6 +3,8 @@ from datetime import datetime
 from art.artist import Artist
 from data.task_result import TaskResult
 
+import csv
+
 
 class DefaultArtist(Artist):
 
@@ -21,3 +23,7 @@ class DefaultArtist(Artist):
 
         self.results_dict[task_results.strategy_name].append(task_results)
 
+    def save_results_to_csv(self, csv_results, strategy_name):
+        with open('./5Tasks/Evaluation_Accuracy.csv', 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow([strategy_name] + csv_results)

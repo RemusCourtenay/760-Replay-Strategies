@@ -49,6 +49,10 @@ class Script:
             self.model = self.model.reset()
             dataset.reset()
 
+            # create array to store results to store to csv
+            if self.parameters.save_to_csv:
+                csv_accuracy = []
+
             for i in range(dataset.get_num_tasks()):
                 start_task = datetime.now()
 
@@ -70,6 +74,16 @@ class Script:
 
                 # Send results to the artist for display/storage
                 self.artist.add_results(task_results)
+
+                # evaluate and store to csv if True
+                if self.parameters.save_to_csv:
+                    test_data, test_label = task.get_validation()
+                    csv_loss, csv_acc = self.model.model.evaluate(test_data,  test_label, verbose=2)
+                    csv_accuracy.append(csv_acc)
+                    print(csv_acc)
+
+            if self.parameters.save_to_csv:
+                self.artist.save_results_to_csv(csv_accuracy, strategy.strategy_name)
 
                 print("Finished task " + str(i) + " in " + str(datetime.now() - start_task))
 

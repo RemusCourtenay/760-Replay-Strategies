@@ -18,18 +18,18 @@ if __name__ == "__main__":
     MNIST_DATA_SIZE = 60000
     MNIST_LABELS = 10
     REPLAY_MEMORY_PERCENT = 0.1
-    NUM_LABELS_PER_TASK = 2
+    NUM_LABELS_PER_TASK = 1
 
     num_task = math.floor(MNIST_LABELS / NUM_LABELS_PER_TASK)
     replay_mem = int((MNIST_DATA_SIZE / num_task) * REPLAY_MEMORY_PERCENT)
     print(replay_mem)
     # TODO... put these into the ScriptParameters object
-    epochs = 10
+    epochs = 5
     prediction_epochs = 5
 
     parameters = ScriptParameters(replay_mem, epochs, save_to_csv=True)
 
-    for i in range(2):
+    for i in range(10):
         script = Script(DefaultNeuralNetwork(parameters),
                         DefaultArtist(),
                         [NoSelectionStrategy(),

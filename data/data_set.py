@@ -9,7 +9,7 @@ import random
 from data.task import Task
 
 # set as True if storing replay samples in buffer
-USE_BUFFER = True
+USE_BUFFER = False
 
 class DataSet(ABC):
 
